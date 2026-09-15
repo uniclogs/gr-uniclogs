@@ -1,0 +1,49 @@
+id: uniclogs_ieee802_15_4_variant_decoder
+label: IEEE 802.15.4 Variable Decoder Definition w/ FEC
+category: '[uniclogs]'
+flags: [show_id]
+
+parameters:
+  - id: preamble
+    label: Preamble
+    dtype: raw
+    default: [0x55, 0x55, 0x55, 0x55, 0x55]
+
+  - id: preamble_thrsh
+    label: Preamble Threshold
+    dtype: int
+    default: 5
+
+  - id: sync_word
+    label: Synchronization Word
+    dtype: raw
+    default: [0x31, 0xe5]
+
+  - id: sync_thrsh
+    label: Synchronization Word Threshold
+    dtype: int
+    default: 3
+
+  - id: constraint
+    label: Convoulutional code constraint length (value of K)
+    dtype: int
+    default: 7
+
+  - id: polynomials
+    label: Convoulutional code polynomials
+    dtype: int_vector
+    default: [79, 109]
+
+  - id: fec
+    label: FEC Enable
+    dtype: bool
+    default: true
+
+value: ${ str(id) }
+
+templates:
+  imports: import gnuradio.uniclogs as uniclogs
+  var_make: |-
+    self.${id} = ${id} = uniclogs.ieee802_15_4_variant_decoder(${preamble}, ${preamble_thrsh}, ${sync_word}, ${sync_thrsh}, ${constraint}, ${polynomials}, ${fec})
+
+file_format: 1

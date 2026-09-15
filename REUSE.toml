@@ -1,0 +1,45 @@
+# See https://reuse.software for more info on this file
+version = 1
+
+# By default all files should be GPLv3, but
+[[annotations]]
+path = "**"
+SPDX-FileCopyrightText = "2026 Portland State Aerospace Society <aerospace@pdx.edu>"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = "./lib/decoder.cc"
+path = "./lib/encoder.cc"
+path = "./lib/ieee802_15_4_variant_decoder.cc"
+path = "./lib/frame_decoder_impl.cc"
+path = "./lib/frame_decoder_impl.h"
+path = "./lib/metadata.cc"
+path = "./lib/shift_reg.cc"
+path = "./include/gnuradio/uniclogs/decoder.h"
+path = "./include/gnuradio/uniclogs/encoder.h"
+path = "./include/gnuradio/uniclogs/ieee802_15_4_variant_decoder.h"
+path = "./include/gnuradio/uniclogs/frame_decoder.h"
+path = "./include/gnuradio/uniclogs/metadata.h"
+path = "./include/gnuradio/uniclogs/shift_reg.h"
+SPDX-FileCopyrightText = "2019-2023, Libre Space Foundation <http://libre.space>"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = "./include/gnuradio/uniclogs/date.h"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2015, 2016, 2017 Howard Hinnant"
+SPDX-FileCopyrightText = "2015, 2016, 2017 Howard Hinnant"
+SPDX-FileCopyrightText = "2016 Adrian Colomitchi"
+SPDX-FileCopyrightText = "2017 Florian Dang"
+SPDX-FileCopyrightText = "2017 Paul Thompson"
+SPDX-FileCopyrightText = "2018, 2019 Tomasz Kamiński"
+SPDX-FileCopyrightText = "2019 Jiangang Zhuang"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "./include/gnuradio/uniclogs/viterbi.h"
+path = "./lib/viterbi/**"
+precedence = "aggregate"
+SPDX-License-Identifier = "Apache V2.0"
+
+

@@ -1,0 +1,14 @@
+title: The UNICLOGS OOT Module
+version: 1.0
+brief: UniCLOGS GNU Radio OOT Modules used on OreSat.
+tags:
+  - sdr
+author:
+copyright_owner:
+license:
+gr_supported_version:
+  - 3.10
+repo:
+website:
+description: |-
+file_format: 1
