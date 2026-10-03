@@ -9,3 +9,6 @@ in this package. A quick listing of the details can be found in Python
 after importing by using:
 
     help(uniclogs)
+
+This branch exists to hold the Python draft of the Viterbi decoder
+system while it is a work in progress.

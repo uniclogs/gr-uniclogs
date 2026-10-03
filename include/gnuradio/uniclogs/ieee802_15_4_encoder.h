@@ -35,7 +35,7 @@ private:
     const size_t d_preamble_len;
     const uint8_t d_preamble;
     std::vector<uint8_t> d_sync_word;
-    uint8_t* d_buffer;
+    std::vector<uint8_t> d_buffer;
     uint8_t* d_payload;
     uint8_t* d_buffer_frame_len;
     uint8_t d_length_field_bytes;
