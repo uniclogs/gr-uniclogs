@@ -2,7 +2,7 @@ import random
 from bitstring import BitArray
 import soundfile as sf
 
-from lib import consts
+import consts
 
 # Synthetic
 class message():
