@@ -2,7 +2,7 @@ import path
 import copy
 
 import input_sources
-from lib import consts
+import consts
 
 
 # Size of register (input + state)
