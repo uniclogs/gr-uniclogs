@@ -5,3 +5,5 @@ build/
 .vscode/
 *.venv
 *.git*
+*pycache*
+*_fec_*
