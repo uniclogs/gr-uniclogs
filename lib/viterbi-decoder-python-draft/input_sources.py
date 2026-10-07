@@ -11,10 +11,13 @@ class message():
         self._k = k
 
         if consts.RANDOM_SIZE:
-            self._frame_len = random.randrange(consts.PACKET_SIZE)
+            self._frame_len = random.randrange(consts.MAX_PACKET_SIZE) * 8  # Since packet size is in bytes
         else:
-            self._frame_len = consts.PACKET_SIZE
-        self._phr = "00000" + (format(self._frame_len, '011b')[::-1])
+            self._frame_len = consts.MAX_PACKET_SIZE * 8  # Since packet size is in bytes
+        if consts.ENDIANNESS == 'little':
+            self._phr = "00000" + (format(self._frame_len, '011b')[::-1])
+        else:
+            self._phr = "00000" + (format(self._frame_len, '011b'))
         self._tail = "0" * self._k
 
         # Initial message with half the length of the frame length to leave room for encoding
@@ -45,10 +48,10 @@ class message():
         return f"{self._encoded_message}"
     # Returns more information
     def info(self):
-        return f"Frame Length: {self._frame_len}\n\nPHR: {self._phr}\n\nInitial Message: {self._initial_message}\n\nTail: {self._tail}\n\nComplete data segment of packet: {self._data_segment}\n\nEncoded Message: {self._encoded_message}\n\n"
+        return f"Frame Length: {self._frame_len // 8} bytes ({self._frame_len} bits)\n\nPHR: {self._phr}\n\nInitial Message: {self._initial_message}\n\nTail: {self._tail}\n\nComplete data segment of packet: {self._data_segment}\n\nEncoded Message: {self._encoded_message}\n\n"
 
 # Real
-class bitstream_from_file():
+class file():
     def __init__(self, filename: str = "", k = 4):
         with open(filename, mode="rb") as file:
             self._bits = BitArray(file.read()).bin
@@ -60,35 +63,9 @@ class bitstream_from_file():
             if consts.DEBUG_OUTPUTS:
                 print("RAW BITS:", self._bits, "\n\n")
 
-        self._k = k
-        self._offset = 0
-
-    def next_message(self):
-        # FIXME implement a methodology for waiting until the next header to grab a
-        # packet. For now this isn't needed, but will be quite soon.
-
-        # Isolate next message
-        # Packet size is doubled due to the encoding method doubling the size of the packet
-        message = self._bits[self._offset:self._offset + (consts.PACKET_SIZE * 2)]
-
-        # Handle cases where the file ended unexpectedly
-        if len(message) != (consts.PACKET_SIZE * 2):
-            print("INSUFFICIENT BITS FOR COMPLETE PACKET")
-
-            # Indicate that file is empty
-            self._offset = len(self._bits)
-            return message
-
-        # Increment offset
-        self._offset += consts.PACKET_SIZE * 2
-
-        return message
-
-    def __getitem__(self, key: int = -1):
-        return self._message[key]
-
-    def is_empty(self):
-        return self._offset >= len(self._bits)
+    # Returns the encoded header and message
+    def encoded_bits(self):
+        return self._bits
 
 if __name__ == "__main__":
 
@@ -97,8 +74,7 @@ if __name__ == "__main__":
         print(test_message)
 
     elif consts.SOURCE == "file":
-        test_message = bitstream_from_file(filename="rx_fec_recording_3")
-        for i in range(len(test_message)):
-            print(test_message[i])
+        test_message = file(filename=consts.FILENAME)
+        print(test_message)
 
     # FIXME stream input type not defined yet

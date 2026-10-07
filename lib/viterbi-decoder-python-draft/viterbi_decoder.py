@@ -7,17 +7,8 @@ import consts
 
 # Size of register (input + state)
 k = 4
-
 # Doubled for checking which paths to prune at each new time step
 num_paths = 2 * (2 ** (k-1))
-
-# Test messages generated from viterbi_encoder.py
-# 
-# This generates a random message of random length within the limit allowed
-# by the header specifications
-# received_message = viterbi_encoder.message(k)
-# encoded_bits = received_message._data_segment 
-
 
 # Increments and culls paths
 def timestep(lower_paths, u_pair):
@@ -43,7 +34,6 @@ def parse_header(encoded_data) -> int:
     if consts.DEBUG_OUTPUTS:
         print(f"\nENCODED HEADER BITS: {encoded_data[:consts.HEADER_SIZE * 2]}")
         
-
     # Initial only has one path with no history
     paths = [path.path()]
 
@@ -55,10 +45,16 @@ def parse_header(encoded_data) -> int:
     size = 0
     for i in range(0, consts.BITS_FOR_DEFINING_FRAME_SIZE):
         if paths[0]._decoded_bits[5 + i] == 1:
-            size += (2 ** i) 
+            if consts.ENDIANNESS == 'big':
+                size += (2 ** (consts.BITS_FOR_DEFINING_FRAME_SIZE - 1 - i)) 
+            else:
+                size += (2 ** i)
+
+    # Packet size is in bytes
+    size *= 8
 
     if consts.DEBUG_OUTPUTS:
-        print(f"DECODED HEADER BITS: {"".join(str(b) for b in paths[0]._decoded_bits[:5])} {"".join(str(b) for b in paths[0]._decoded_bits[5:])}, PACKET SIZE: {size}\n")
+        print(f"DECODED HEADER BITS: {"".join(str(b) for b in paths[0]._decoded_bits[:5])} {"".join(str(b) for b in paths[0]._decoded_bits[5:])}, PACKET SIZE: {size // 8} bytes ({size} bits)\n")
     
     return size
 
@@ -87,9 +83,8 @@ if __name__ == "__main__":
     # Read from recording file and decode message chunkwise
     if consts.SOURCE == "file":
         print("READING FROM FILE\n")
-        encoded_bits = input_sources.bitstream_from_file(filename=consts.FILENAME)
-        while not encoded_bits.is_empty():
-            decode(encoded_bits.next_message())
+        message = input_sources.file(filename=consts.FILENAME)
+        decode(message.encoded_bits())
 
     # Read from generated file for testing
     elif consts.SOURCE == "test":
