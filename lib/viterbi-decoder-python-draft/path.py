@@ -33,7 +33,7 @@ class path():
 
     def __str__(self):
         if not VERBOSE:
-            return f"{"".join(str(b) for b in self._decoded_bits[:-4])}"
+            return f"{"".join(str(b) for b in self._decoded_bits)}"
         return f"Decoded Message: {"".join(str(b) for b in self._decoded_bits)}\nBranch Metrics: {self._branch_metrics}\nMetric Sum: {self._metric_accumulator}\n"
 
 
