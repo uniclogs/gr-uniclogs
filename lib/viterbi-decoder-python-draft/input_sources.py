@@ -6,8 +6,11 @@ import consts
 # Synthetic
 class message():
 
-    def __init__(self, seed: int = 0):
-        random.seed(seed)
+    def __init__(self, seed: int = -1):
+        if seed == -1:
+            random.seed()
+        else:
+            random.seed(seed)
 
         self._k = consts.K
 

@@ -64,6 +64,14 @@ def parse_header(encoded_data) -> int:
     # Packet size is in bytes
     size *= consts.BITS_PER_BYTE
 
+    # Sanity checking
+    if str("".join(str(b) for b in min_path._decoded_bits[:5])) != "00000":
+        print("DECODED RESERVED BITS ARE NOT 00000:", "".join(str(b) for b in min_path._decoded_bits[:5]), ", ",end="")
+        return -1
+    if size > consts.MAX_PACKET_SIZE * consts.BITS_PER_BYTE:
+        print("DECODED PACKET SIZE IS LARGER THAN MAXIMUM:", size, "bits, ", end="")
+        return -1
+
     if consts.DEBUG_OUTPUTS:
         print(f"DECODED HEADER BITS: {"".join(str(b) for b in min_path._decoded_bits[:5])} {"".join(str(b) for b in min_path._decoded_bits[5:consts.HEADER_SIZE])}, PACKET SIZE: {size // 8} bytes ({size} bits)\n")
     
@@ -74,6 +82,12 @@ def parse_header(encoded_data) -> int:
 def decode(encoded_data):   
 
     message_size = parse_header(encoded_data)
+
+    # If sanity check on message header was failed, indicate that this message 
+    # is likely invalid and only decode the max packet size
+    if message_size == -1:
+        print("THE FOLLOWING MESSAGE IS LIKELY INVALID!!\n")
+        message_size = consts.MAX_PACKET_SIZE * consts.BITS_PER_BYTE
 
     # Initial only has one path with no history
     paths = [path.path()] + [None] * (consts.NUM_STATES - 1)
@@ -106,13 +120,15 @@ if __name__ == "__main__":
 
         # Error checking
         d_ham = 0
+        if abs(len(decoded_message) - len(message._initial_message)) != 0:
+            print("MESSAGES OF UNEVEN LENGTH! DECODED MESSAGE LENGTH: ", len(decoded_message), ", ORIGINAL MESSAGE LENGTH: ", len(message._initial_message), sep="")
         for i in range(min(len(decoded_message), len(message._initial_message))):
             d_ham += int(message._initial_message[i] != decoded_message[i])
         print("NUM ERRORS:", d_ham, "\nERROR RATE:", f"{(d_ham/max(min(len(decoded_message), len(message._initial_message)), 1) * 100):.2f}%")
 
         # Compare to noise generated, if used
         if consts.ADD_NOISE:
-            print("ERRORS INJECTED ARTIFICIALLY:", message._injected_errors)
+            print("\nERRORS INJECTED ARTIFICIALLY: ", message._injected_errors, "\nNOISE LEVEL: ", consts.NOISE_AMOUNT * 100, "%", sep="")
 
 
     # FIXME stream input type not defined yet
