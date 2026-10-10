@@ -1,28 +1,29 @@
 import random
 from bitstring import BitArray
-import soundfile as sf
 
 import consts
 
 # Synthetic
 class message():
 
-    def __init__(self, k: int = 4):
-        self._k = k
+    def __init__(self, seed: int = 0):
+        random.seed(seed)
+
+        self._k = consts.K
 
         if consts.RANDOM_SIZE:
-            self._frame_len = random.randrange(consts.MAX_PACKET_SIZE) * 8  # Since packet size is in bytes
+            self._frame_len = random.randrange(consts.MAX_PACKET_SIZE)
         else:
-            self._frame_len = consts.MAX_PACKET_SIZE * 8  # Since packet size is in bytes
+            self._frame_len = consts.MAX_PACKET_SIZE
         if consts.ENDIANNESS == 'little':
             self._phr = "00000" + (format(self._frame_len, '011b')[::-1])
         else:
             self._phr = "00000" + (format(self._frame_len, '011b'))
-        self._tail = "0" * self._k
+        self._tail = "0" * (self._k - 1)
 
-        # Initial message with half the length of the frame length to leave room for encoding
+        # Initial message is randomly generated 
         self._initial_message = ""
-        for i in range(self._frame_len // 2):
+        for i in range(self._frame_len * consts.BITS_PER_BYTE):
                 self._initial_message += f"{random.randrange(2)}"
 
         self._data_segment = self._phr + self._initial_message + self._tail
@@ -40,15 +41,26 @@ class message():
                 m3, m2, m1 = m2, m1, m0
 
             return encoded_message
-
+        
         self._encoded_message = encode(self._phr + self._initial_message + self._tail)
+
+        # Corrupt message if required
+        if consts.ADD_NOISE:  
+            self._injected_errors = 0
+            for i in range(len(self._encoded_message)):
+                if random.random() < consts.NOISE_AMOUNT:
+                    self._encoded_message = self._encoded_message[:i] + ('0' if self._encoded_message[i] == '1' else '1') + self._encoded_message[i + 1:]
+                    self._injected_errors += 1
+                
 
     # Returns the encoded header and message  
     def encoded_bits(self): 
         return f"{self._encoded_message}"
     # Returns more information
     def info(self):
-        return f"Frame Length: {self._frame_len // 8} bytes ({self._frame_len} bits)\n\nPHR: {self._phr}\n\nInitial Message: {self._initial_message}\n\nTail: {self._tail}\n\nComplete data segment of packet: {self._data_segment}\n\nEncoded Message: {self._encoded_message}\n\n"
+        return f"Frame Length: {self._frame_len} bytes ({self._frame_len * consts.BITS_PER_BYTE} bits)\n\nPHR: {self._phr}\n\nInitial Message: {self._initial_message}\n\nTail: {self._tail}\n\nComplete data segment of packet: {self._data_segment}\n\nEncoded Message: {self._encoded_message}\n\n"
+    def __str__(self):
+        return self.encoded_bits()
 
 # Real
 class file():
@@ -66,10 +78,12 @@ class file():
     # Returns the encoded header and message
     def encoded_bits(self):
         return self._bits
+    def __str__(self):
+        return self.encoded_bits()
 
 if __name__ == "__main__":
 
-    if not consts.SOURCE == "test":
+    if consts.SOURCE == "test":
         test_message = message()
         print(test_message)
 
