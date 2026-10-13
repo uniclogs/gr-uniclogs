@@ -6,7 +6,7 @@ import consts
 # Synthetic
 class message():
 
-    def __init__(self, seed: int = -1):
+    def __init__(self, seed: int = -1, noise: float = consts.NOISE_AMOUNT):
         if seed == -1:
             random.seed()
         else:
@@ -51,7 +51,7 @@ class message():
         if consts.ADD_NOISE:  
             self._injected_errors = 0
             for i in range(len(self._encoded_message)):
-                if random.random() < consts.NOISE_AMOUNT:
+                if random.random() < noise:
                     self._encoded_message = self._encoded_message[:i] + ('0' if self._encoded_message[i] == '1' else '1') + self._encoded_message[i + 1:]
                     self._injected_errors += 1
                 

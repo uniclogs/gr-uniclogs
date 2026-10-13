@@ -67,6 +67,11 @@ def parse_header(encoded_data) -> int:
 
     if consts.DEBUG_OUTPUTS:
         print(f"\nENCODED HEADER BITS: {encoded_data[:consts.HEADER_SIZE * 2]}")
+
+    if len(encoded_data) // 2 < consts.HEADER_SIZE + consts.HEADER_OVERHEAD:  
+        if consts.DEBUG_OUTPUTS:
+            print("CANNOT PARSE HEADER OF LENGTH:", len(encoded_data) // 2, end="")
+        return -1
         
     # Iterate over each bit in the header PLUS a lookahead for a more reliable result
     metrics, table = solve(encoded_data, consts.HEADER_SIZE + consts.HEADER_OVERHEAD)
@@ -80,10 +85,12 @@ def parse_header(encoded_data) -> int:
 
     # Sanity checking and debug outputs
     if str("".join(str(b) for b in bits[:5])) != "00000":
-        print("DECODED RESERVED BITS ARE NOT 00000:", "".join(str(b) for b in bits[:5]), ", ",end="")
+        if consts.DEBUG_OUTPUTS:
+            print("DECODED RESERVED BITS ARE NOT 00000:", "".join(str(b) for b in bits[:5]), ", ",end="")
         return -1
-    if size > consts.MAX_PACKET_SIZE * consts.BITS_PER_BYTE:
-        print("DECODED PACKET SIZE IS LARGER THAN MAXIMUM:", size, "bits, ", end="")
+    if size > consts.MAX_PACKET_SIZE * consts.BITS_PER_BYTE: 
+        if consts.DEBUG_OUTPUTS:    
+            print("DECODED PACKET SIZE IS LARGER THAN MAXIMUM:", size, "bits, ", end="")
         return -1
     if consts.DEBUG_OUTPUTS:
         print(f"DECODED HEADER BITS: {"".join(str(b) for b in bits[:5])} {"".join(str(b) for b in bits[5:consts.HEADER_SIZE])}, PACKET SIZE: {size // 8} bytes ({size} bits)\n")
@@ -98,48 +105,63 @@ def decode(encoded_data):
     # If sanity check on message header was failed, indicate that this message 
     # is likely invalid and only decode the max packet size
     if message_size == -1:
-        print("THE FOLLOWING MESSAGE IS LIKELY INVALID!!\n")
-        message_size = consts.MAX_PACKET_SIZE * consts.BITS_PER_BYTE
+        message_size = min(((len(encoded_data) - consts.HEADER_SIZE) // 2), (consts.MAX_PACKET_SIZE * consts.BITS_PER_BYTE))
 
     # Entire size will be sum of header size, message size, and tail size
     steps = consts.HEADER_SIZE + message_size + (consts.K - 1)
+    if steps > len(encoded_data) // 2:
+        if consts.DEBUG_OUTPUTS:
+            print(f"TRUNCATING MESSAGE: HEADER IMPLIES {steps} BUT ONLY {len(encoded_data) // 2} AVAILABLE")
+        steps = len(encoded_data) // 2
+        truncated = True
+    else:
+        truncated = False
 
     # Get the metrics and state table, from which associated decoded bits are gathered
     metrics, table = solve(encoded_data, steps)
-    bits = table.trace(0)
+    bits = table.trace(best_state(metrics) if truncated else 0)
     
-    # Display the decoded message (FIXME remove later once return value is used more effectively)
-    print("DECODED MESSAGE:", "".join(map(str, bits[consts.HEADER_SIZE:-(consts.K - 1)])), "\n")
-
-    # Trim off the header and tail
-    return "".join(map(str, bits[consts.HEADER_SIZE:-(consts.K - 1)])), metrics[0]
+    # Trim off the header and tail unless truncated, in which case tail is not trimmed
+    if not truncated:
+        return "".join(map(str, bits[consts.HEADER_SIZE:-(consts.K - 1)])), metrics[0]
+    else:
+        return "".join(map(str, bits[consts.HEADER_SIZE:])), metrics[0]
 
 
 if __name__ == "__main__":
 
     # Read from recording file and decode message chunkwise
     if consts.SOURCE == "file":
-        print("READING FROM FILE\n")
+        
+        if consts.DEBUG_OUTPUTS:
+            print("READING FROM FILE\n")
         message = input_sources.file(filename=consts.FILENAME)
-        decoded_message = decode(message.encoded_bits())
+        decoded_message, metric_sum = decode(message.encoded_bits())
+
+        if consts.DEBUG_OUTPUTS:
+            print("\nDECODED MESSAGE:", decoded_message, "\n")
 
     # Read from generated file for testing
     elif consts.SOURCE == "test":
         message = input_sources.message()
-        print(message.info())
-        print("READING FROM SYNTHETIC MESSAGE\n")
+        if consts.DEBUG_OUTPUTS:
+            print(message.info())
+            print("READING FROM SYNTHETIC MESSAGE\n")
         decoded_message, metric_sum = decode(message.encoded_bits())
+
+        if consts.DEBUG_OUTPUTS:
+            print("\nDECODED MESSAGE:", decoded_message, "\n")
 
         # Error checking
         d_ham = 0
-        if abs(len(decoded_message) - len(message._initial_message)) != 0:
+        if abs(len(decoded_message) - len(message._initial_message)) != 0 and consts.DEBUG_OUTPUTS:
             print("MESSAGES OF UNEVEN LENGTH! DECODED MESSAGE LENGTH: ", len(decoded_message), ", ORIGINAL MESSAGE LENGTH: ", len(message._initial_message), sep="")
         for i in range(min(len(decoded_message), len(message._initial_message))):
             d_ham += int(message._initial_message[i] != decoded_message[i])
         print("NUM ERRORS:", d_ham, "\nERROR RATE:", f"{(d_ham/max(min(len(decoded_message), len(message._initial_message)), 1) * 100):.2f}%")
 
         # Compare to noise generated, if used
-        if consts.ADD_NOISE:
+        if consts.ADD_NOISE and consts.DEBUG_OUTPUTS:
             print("\nERRORS INJECTED ARTIFICIALLY: ", message._injected_errors, "\nNOISE LEVEL: ", consts.NOISE_AMOUNT * 100, "%", sep="")
             if metric_sum > message._injected_errors:
                 print("DECODE FAILURE: METRIC SUM EXCEEDS THE AMOUNT OF ACTUAL ERRORS INDUCED")
