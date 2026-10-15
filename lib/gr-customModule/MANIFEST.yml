@@ -8,6 +8,7 @@ author:
 copyright_owner:
   - Portland State Aerospace Society (PSAS)
 license:
+  - GPL-v3
 gr_supported_version:
   - 3.X
 repo: https://github.com/uniclogs/gr-uniclogs/tree/Viterbi-Decoder-Dev-Branch
