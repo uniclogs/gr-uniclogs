@@ -1,0 +1,20 @@
+title: Viterbi_Decoder
+version: 1.0
+brief: Viterbi decoder for k=4
+tags:
+  - sdr
+author:
+  - Aidan Akenson (aidan.akenson@gmail.com)
+copyright_owner:
+  - Portland State Aerospace Society (PSAS)
+license:
+  - GPL-v3
+gr_supported_version:
+  - 3.X
+repo: https://github.com/uniclogs/gr-uniclogs/tree/Viterbi-Decoder-Dev-Branch
+
+description:
+  This module operates on messages of bits, where the coding efficiency is assumed 
+  to be 0.5. Bits are treated as inverted per IEEE 802.15.4. Other parameters may 
+  be adjusted within viterbi.py if required.
+file_format: 1
