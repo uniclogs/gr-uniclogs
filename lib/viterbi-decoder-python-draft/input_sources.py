@@ -67,7 +67,7 @@ class message():
 
 # Real
 class file():
-    def __init__(self, filename: str = "", k = 4):
+    def __init__(self, filename: str = ""):
         with open(filename, mode="rb") as file:
             self._bits = BitArray(file.read()).bin
 
