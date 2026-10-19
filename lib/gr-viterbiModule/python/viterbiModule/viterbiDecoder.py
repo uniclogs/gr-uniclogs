@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# Copyright 2026 AidanAkenson.
+# Copyright 2026 Portland State Aerospace Society.
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
