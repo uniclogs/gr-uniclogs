@@ -219,30 +219,10 @@ int ieee802_15_4_variant_decoder::decode_frame_len_fec(const uint8_t* in)
     int phr_encoded_len = 30;
     uint8_t encoded_phr[phr_encoded_len];
 
-    printf("stuff here\n");
     for (int i; i <= phr_encoded_len; i++) {
         encoded_phr[i] = in[i];
     }
-    printf("stuff here again\n");
 
-    // cast to pmt for compat with viterbi lib
-    // pmt::pmt_t pdu_vector = pdu::make_pdu_vector(
-    //     gr::types::vector_type::byte_t, encoded_phr, phr_encoded_len);
-    // std::vector<uint8_t> msg = pmt::u8vector_elements(pmt::cdr(pdu_vector));
-    std::string bits = (char*)encoded_phr;
-    // for (auto b : msg) {
-    //     bits.push_back(b ? '1' : '0');
-    // }
-    //
-    printf("stuff here agian 2again\n");
-    // decode phr
-    std::string outbits = d_codec.Decode(bits);
-    std::vector<uint8_t> out;
-    for (auto b : outbits) {
-        out.push_back(b == '1');
-    }
-
-    printf("stuff here again again\n");
     uint8_t* bytes = new uint8_t[d_length_field_len];
     for (size_t i = 0; i < d_length_field_len; i++) {
         printf("%x \r", out[i]);
