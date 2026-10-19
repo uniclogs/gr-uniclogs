@@ -1,27 +1,22 @@
-update_block:
-  gr_modtool bind ieee802_15_4_variant_decoder
+cmake_cmd := if os_family() == "windows" { "cmake .." } else { "cmake .. -DCMAKE_INSTALL_PREFIX=/usr" }
+make_cmd := if os_family() == "windows" { "make" } else { "make -j $(nproc)" }
+
+update_block mod:
+  gr_modtool bind {{mod}}
 
 build:
   #!/usr/bin/env bash
+  mkdir build -p
   cd build
-  cmake .. \
-    -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_BUILD_TYPE=RELEASE
-  make -j $(nproc)
+  {{ cmake_cmd }}
+  {{ make_cmd }}
 
-install:
+install: build
   #!/usr/bin/env bash
   cd build
   sudo make install
 
-plz:
-  just build
-  just install
-
 clean-build:
   rm -rf ./build
-  mkdir build
+  mkdir build -p
   just build
-
-test:
-  python ./test.py

@@ -216,25 +216,18 @@ int ieee802_15_4_variant_decoder::decode_frame_len(const uint8_t* in)
 
 int ieee802_15_4_variant_decoder::decode_frame_len_fec(const uint8_t* in)
 {
-    int phr_encoded_len = 30;
-    uint8_t encoded_phr[phr_encoded_len];
-
-    for (int i; i <= phr_encoded_len; i++) {
-        encoded_phr[i] = in[i];
-    }
-
     uint8_t* bytes = new uint8_t[d_length_field_len];
     for (size_t i = 0; i < d_length_field_len; i++) {
-        printf("%x \r", out[i]);
+        printf("%x \r", in[i]);
         uint8_t b = 0x0;
-        b = out[i * 8 + 7] << 0;
-        b |= out[i * 8 + 6] << 1;
-        b |= out[i * 8 + 5] << 2;
-        b |= out[i * 8 + 4] << 3;
-        b |= out[i * 8 + 3] << 4;
-        b |= out[i * 8 + 2] << 5;
-        b |= out[i * 8 + 1] << 6;
-        b |= out[i * 8 + 0] << 7;
+        b = in[i * 8 + 7] << 0;
+        b |= in[i * 8 + 6] << 1;
+        b |= in[i * 8 + 5] << 2;
+        b |= in[i * 8 + 4] << 3;
+        b |= in[i * 8 + 3] << 4;
+        b |= in[i * 8 + 2] << 5;
+        b |= in[i * 8 + 1] << 6;
+        b |= in[i * 8 + 0] << 7;
         bytes[i] = b;
     }
 
@@ -243,7 +236,7 @@ int ieee802_15_4_variant_decoder::decode_frame_len_fec(const uint8_t* in)
 
     d_len = b;
     d_state = DECODING_PAYLOAD;
-    return 8 * phr_encoded_len;
+    return 8 * d_length_field_len;
 }
 
 void ieee802_15_4_variant_decoder::decode_payload(decoder_status_t& status,
