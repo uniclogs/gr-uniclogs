@@ -10,11 +10,10 @@
 # Install public header files
 ########################################################################
 install(FILES api.h
-    ieee802_15_4_variant_decoder.h
     shift_reg.h
     decoder.h
     metadata.h
-    viterbi.h
     date.h
     frame_decoder.h
-    encoder.h DESTINATION include/gnuradio/uniclogs)
+    encoder.h 
+    ieee802_15_4_variant_decoder.h DESTINATION include/gnuradio/uniclogs)

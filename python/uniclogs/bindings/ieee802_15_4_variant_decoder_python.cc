@@ -14,7 +14,7 @@
 /* BINDTOOL_GEN_AUTOMATIC(0)                                                       */
 /* BINDTOOL_USE_PYGCCXML(0)                                                        */
 /* BINDTOOL_HEADER_FILE(ieee802_15_4_variant_decoder.h) */
-/* BINDTOOL_HEADER_FILE_HASH(491cc138b8426e6bc012ecf455346745)                     */
+/* BINDTOOL_HEADER_FILE_HASH(2e002be53d18b94305697abf645c0ae9)                     */
 /***********************************************************************************/
 
 #include <pybind11/complex.h>
@@ -43,9 +43,8 @@ void bind_ieee802_15_4_variant_decoder(py::module& m)
              py::arg("preamble_threshold"),
              py::arg("sync"),
              py::arg("sync_threshold"),
-             py::arg("constraint"),
-             py::arg("polynomials"),
-             py::arg("fec"),
+             py::arg("invert_payload"),
+             py::arg("length_little_endian"),
              D(ieee802_15_4_variant_decoder, make))
 
 
@@ -59,11 +58,6 @@ void bind_ieee802_15_4_variant_decoder(py::module& m)
         .def("reset",
              &ieee802_15_4_variant_decoder::reset,
              D(ieee802_15_4_variant_decoder, reset))
-
-
-        .def("input_multiple",
-             &ieee802_15_4_variant_decoder::input_multiple,
-             D(ieee802_15_4_variant_decoder, input_multiple))
 
         ;
 }

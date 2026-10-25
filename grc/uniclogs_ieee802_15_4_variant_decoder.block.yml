@@ -24,18 +24,13 @@ parameters:
     dtype: int
     default: 3
 
-  - id: constraint
-    label: Convoulutional code constraint length (value of K)
-    dtype: int
-    default: 7
+  - id: invert_payload
+    label: Invert payload bits
+    dtype: bool
+    default: true
 
-  - id: polynomials
-    label: Convoulutional code polynomials
-    dtype: int_vector
-    default: [79, 109]
-
-  - id: fec
-    label: FEC Enable
+  - id: length_little_endian
+    label: Length field LSB first (little endian)
     dtype: bool
     default: true
 
@@ -44,6 +39,6 @@ value: ${ str(id) }
 templates:
   imports: import gnuradio.uniclogs as uniclogs
   var_make: |-
-    self.${id} = ${id} = uniclogs.ieee802_15_4_variant_decoder(${preamble}, ${preamble_thrsh}, ${sync_word}, ${sync_thrsh}, ${constraint}, ${polynomials}, ${fec})
+    self.${id} = ${id} = uniclogs.ieee802_15_4_variant_decoder(${preamble}, ${preamble_thrsh}, ${sync_word}, ${sync_thrsh}, ${invert_payload}, ${length_little_endian})
 
 file_format: 1
