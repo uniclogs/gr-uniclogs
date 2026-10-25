@@ -24,11 +24,21 @@ parameters:
     dtype: int
     default: 3
 
+  - id: invert_payload
+    label: Invert payload bits
+    dtype: bool
+    default: true
+
+  - id: length_little_endian
+    label: Length field LSB first (little endian)
+    dtype: bool
+    default: true
+
 value: ${ str(id) }
 
 templates:
   imports: import gnuradio.uniclogs as uniclogs
   var_make: |-
-    self.${id} = ${id} = uniclogs.ieee802_15_4_variant_decoder(${preamble}, ${preamble_thrsh}, ${sync_word}, ${sync_thrsh})
+    self.${id} = ${id} = uniclogs.ieee802_15_4_variant_decoder(${preamble}, ${preamble_thrsh}, ${sync_word}, ${sync_thrsh}, ${invert_payload}, ${length_little_endian})
 
 file_format: 1

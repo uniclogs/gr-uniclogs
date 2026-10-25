@@ -22,7 +22,7 @@ sudo make install
 ```
 
 The CMake will use the default installation prefix.
-If your using Linux, depending on your distribution your installation path may vary.
+If you're using Linux, depending on your distrubution your installation path may vary.
 Use the `CMAKE_INSTALL_PREFIX` flag to set your path.
 
 ```

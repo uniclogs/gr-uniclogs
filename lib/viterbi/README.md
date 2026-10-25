@@ -1,1 +1,0 @@
-This viterbi decoder is taken from https://github.com/xukmin/viterbi

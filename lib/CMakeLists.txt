@@ -12,15 +12,14 @@
 include(GrPlatform) #define LIB_SUFFIX
 
 list(APPEND uniclogs_sources
-    ieee802_15_4_variant_decoder.cc
-    shift_reg.cc
     decoder.cc
-    metadata.cc
-    viterbi/viterbi.cc
-    frame_decoder_impl.cc
     encoder.cc
-    frame_encoder_impl.cc
-    ieee802_15_4_encoder.cc)
+    viterbi_frame_decoder.cc
+    frame_extractor.cc
+    frame_decoder_impl.cc
+    ieee802_15_4_variant_decoder.cc
+    metadata.cc 
+    shift_reg.cc)
 
 
 set(uniclogs_sources
