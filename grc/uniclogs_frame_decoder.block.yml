@@ -1,5 +1,6 @@
 id: uniclogs_frame_decoder
 label: Uniclogs Frame Decoder
+category: '[uniclogs]'
 
 parameters:
 - id: itype

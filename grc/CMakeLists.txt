@@ -5,8 +5,11 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
-install(FILES
+install(
+    FILES
     uniclogs_ieee802_15_4_variant_decoder.block.yml
     uniclogs_frame_decoder.block.yml
     uniclogs_frame_encoder.block.yml
-    uniclogs_ieee802_15_4_encoder.block.yml DESTINATION share/gnuradio/grc/blocks)
+    uniclogs_ieee802_15_4_encoder.block.yml
+    DESTINATION
+    share/gnuradio/grc/blocks)

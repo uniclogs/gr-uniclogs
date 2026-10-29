@@ -1,5 +1,6 @@
-id: variable_ieee802_15_4_encoder
+id: uniclogs_variable_ieee802_15_4_encoder
 label: IEEE 802.15.4 Encoder Definition
+category: '[uniclogs]'
 flags: [show_id]
 
 parameters:
@@ -28,7 +29,7 @@ value: ${ str(id) }
 
 templates:
   imports: import gnuradio.uniclogs as uniclogs
-  var_make: |-
+  make:
     self.${id} = ${id} = uniclogs.ieee802_15_4_encoder.make(${preamble}, ${preamble_len}, ${sync_word}, ${frame_len})
 
 file_format: 1

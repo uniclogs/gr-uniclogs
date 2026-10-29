@@ -26,14 +26,7 @@ static const char* __doc_gr_uniclogs_ieee802_15_4_encoder_ieee802_15_4_encoder_1
     R"doc()doc";
 
 
-static const char* __doc_gr_uniclogs_ieee802_15_4_encoder_ieee802_15_4_encoder_2 =
-    R"doc()doc";
-
-
-static const char* __doc_gr_uniclogs_ieee802_15_4_encoder_make_0 = R"doc()doc";
-
-
-static const char* __doc_gr_uniclogs_ieee802_15_4_encoder_make_1 = R"doc()doc";
+static const char* __doc_gr_uniclogs_ieee802_15_4_encoder_make = R"doc()doc";
 
 
 static const char* __doc_gr_uniclogs_ieee802_15_4_encoder_encode = R"doc()doc";

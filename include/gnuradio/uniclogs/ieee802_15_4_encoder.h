@@ -18,17 +18,6 @@ public:
     using sptr = std::shared_ptr<ieee802_15_4_encoder>;
     static sptr make(uint8_t preamble,
                      size_t preamble_len,
-                     size_t length_field_bytes,
-                     const std::vector<uint8_t>& sync_word);
-
-    ieee802_15_4_encoder(uint8_t preamble,
-                         size_t preamble_len,
-                         size_t length_field_bytes,
-                         const std::vector<uint8_t>& sync_word);
-
-
-    static sptr make(uint8_t preamble,
-                     size_t preamble_len,
                      const std::vector<uint8_t>& sync_word,
                      size_t frame_len);
 

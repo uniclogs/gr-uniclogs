@@ -4,19 +4,10 @@
 
 #include <gnuradio/io_signature.h>
 #include <gnuradio/uniclogs/ieee802_15_4_encoder.h>
+#include <iterator>
 
 namespace gr {
 namespace uniclogs {
-ieee802_15_4_encoder::sptr
-ieee802_15_4_encoder::make(uint8_t preamble,
-                           size_t preamble_len,
-                           size_t length_field_bytes,
-                           const std::vector<uint8_t>& sync_word)
-{
-    return ieee802_15_4_encoder::sptr(
-        new ieee802_15_4_encoder(preamble, preamble_len, length_field_bytes, sync_word));
-}
-
 ieee802_15_4_encoder::sptr
 ieee802_15_4_encoder::make(uint8_t preamble,
                            size_t preamble_len,
@@ -31,7 +22,7 @@ ieee802_15_4_encoder::ieee802_15_4_encoder(uint8_t preamble,
                                            size_t preamble_len,
                                            const std::vector<uint8_t>& sync_word,
                                            size_t frame_len)
-    : d_max_frame_len(2047),
+    : d_max_frame_len(frame_len),
       d_preamle_len(preamble_len),
       d_var_len(0),
       d_length_field_bytes(0)
@@ -41,32 +32,23 @@ ieee802_15_4_encoder::ieee802_15_4_encoder(uint8_t preamble,
         throw std::invalid_argument(
             "ieee802_15_4_encoder: SYNC word should be at least one byte");
     }
-
-    d_buffer = new uint8_t[preamble_len + sync_word.size() + d_max_frame_len];
-    std::fill_n(d_buffer, preamble_len, preamble);
-    std::copy(sync_word.begin(), sync_word.end(), d_buffer + preamble_len);
-    d_payload = d_buffer + preamble_len + sync_word.size();
-}
-
-ieee802_15_4_encoder::ieee802_15_4_encoder(uint8_t preamble,
-                                           size_t preamble_len,
-                                           size_t length_field_bytes,
-                                           const std::vector<uint8_t>& sync_word)
-    : d_max_frame_len(((size_t)1 << (length_field_bytes * 8)) - 1),
-      d_preamle_len(preamble_len),
-      d_var_len(1),
-      d_length_field_bytes(length_field_bytes)
-{
-    if (!sync_word.size()) {
+    if (d_max_frame_len > 2047) {
         throw std::invalid_argument(
-            "ieee802_15_4_encoder: SYNC word should be at least one byte");
+            "ieee802_15_4_encoder: Frame len should not be bigger than 2047 bits");
     }
-    d_buffer = new uint8_t[preamble_len + sync_word.size() + d_max_frame_len +
-                           d_length_field_bytes];
+
+    d_buffer = new uint8_t[preamble_len + sync_word.size() + 2 + d_max_frame_len];
+    // fill the buffer with the preamble
     std::fill_n(d_buffer, preamble_len, preamble);
+    // copy sync word into the buffer after the preamble
     std::copy(sync_word.begin(), sync_word.end(), d_buffer + preamble_len);
-    d_payload = d_buffer + preamble_len + sync_word.size();
+    // TODO: Once we move to a nonstatic PHR, i.e. when we have FEC functional
+    // need to add the flags for FEC and eventually data whitening into the PHR
+    uint16_t d_phr = (uint16_t)(d_max_frame_len);
+    // address which we want to add the payload
+    d_payload = d_buffer + preamble_len + sync_word.size() + d_phr;
 }
+
 
 ieee802_15_4_encoder::~ieee802_15_4_encoder() { delete[] d_buffer; }
 
@@ -84,6 +66,7 @@ pmt::pmt_t ieee802_15_4_encoder::encode(pmt::pmt_t msg)
 
     size_t pdu_len(0);
     const uint8_t* pdu = (const uint8_t*)pmt::uniform_vector_elements(b, pdu_len);
+
     if (pdu_len > d_max_frame_len) {
         throw std::runtime_error("ieee802_15_4_encoder: PDU received has a size larger "
                                  "than the maximum allowed");

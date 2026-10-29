@@ -1,5 +1,6 @@
 id: uniclogs_frame_encoder
 label: Frame Encoder
+category: '[uniclogs]'
 
 parameters:
 

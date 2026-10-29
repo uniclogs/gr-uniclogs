@@ -19,7 +19,6 @@ list(APPEND uniclogs_sources
     viterbi/viterbi.cc
     frame_decoder_impl.cc
     encoder.cc
-    ieee802_15_4_encode.cc
     frame_encoder_impl.cc
     ieee802_15_4_encoder.cc)
 
