@@ -1,4 +1,3 @@
-
 #ifndef INCLUDED_UNICLOGS_ENCODER_H
 #define INCLUDED_UNICLOGS_ENCODER_H
 
@@ -10,11 +9,11 @@ namespace gr {
 namespace uniclogs {
 
 /*!
- * \brief Abstract class defining the API of the SatNOGS Encoders
+ * \brief Abstract class defining the API of the uniclogs Encoders
  *
- * Abstract class defining the API of the SatNOGS Encoders
+ * Abstract class defining the API of the uniclogs Encoders
  *
- * The gr-satnogs module tries to provide a unified encoding framework,
+ * The gr-uniclogs module tries to provide a unified encoding framework,
  * for various satellites and framing schemes.
  *
  * Specialization is performed by passing to the generic encoding block

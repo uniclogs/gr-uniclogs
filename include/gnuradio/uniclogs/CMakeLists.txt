@@ -17,4 +17,6 @@ install(FILES api.h
     viterbi.h
     date.h
     frame_decoder.h
-    encoder.h DESTINATION include/gnuradio/uniclogs)
+    encoder.h
+    frame_encoder.h
+    ieee802_15_4_encoder.h DESTINATION include/gnuradio/uniclogs)

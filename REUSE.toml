@@ -19,7 +19,9 @@ path = [
   "./include/gnuradio/uniclogs/decoder.h",
   "./include/gnuradio/uniclogs/encoder.h",
   "./include/gnuradio/uniclogs/ieee802_15_4_variant_decoder.h",
+  "./include/gnuradio/uniclogs/ieee802_15_4_encoder.h",
   "./include/gnuradio/uniclogs/frame_decoder.h",
+  "./include/gnuradio/uniclogs/frame_encoder.h",
   "./include/gnuradio/uniclogs/metadata.h",
   "./include/gnuradio/uniclogs/shift_reg.h",
 ]

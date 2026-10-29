@@ -18,7 +18,7 @@ namespace uniclogs {
  * The frame and metadata are produced in a pmt dictionary, with the
  * keys "pdu" and "metadata".
  *
- * \ingroup satnogs
+ * \ingroup uniclogs
  *
  */
 class UNICLOGS_API frame_decoder : virtual public gr::sync_block
@@ -27,7 +27,7 @@ public:
     typedef std::shared_ptr<frame_decoder> sptr;
 
     /*!
-     * \brief Return a shared_ptr to a new instance of satnogs::frame_decoder.
+     * \brief Return a shared_ptr to a new instance of uniclogs::frame_decoder.
      * @param decoder_object the decoder object to use
      */
     static sptr make(decoder::decoder_sptr decoder_object, int input_size);

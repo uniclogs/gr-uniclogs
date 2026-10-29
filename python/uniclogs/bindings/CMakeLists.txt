@@ -23,11 +23,11 @@ include(GrPybind)
 ########################################################################
 # Python Bindings
 ########################################################################
-
 list(APPEND uniclogs_python_files
     ieee802_15_4_variant_decoder_python.cc
     frame_decoder_python.cc
-    python_bindings.cc)
+    frame_encoder_python.cc
+    ieee802_15_4_encoder_python.cc python_bindings.cc)
 
 gr_pybind_make_oot(uniclogs ../../.. gr::uniclogs "${uniclogs_python_files}")
 

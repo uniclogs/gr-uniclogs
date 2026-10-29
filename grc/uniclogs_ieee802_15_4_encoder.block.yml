@@ -1,0 +1,34 @@
+id: variable_ieee802_15_4_encoder
+label: IEEE 802.15.4 Encoder Definition
+flags: [show_id]
+
+parameters:
+  - id: preamble
+    label: Preamble
+    dtype: int
+    default: "0x55"
+
+  - id: preamble_len
+    label: Preamble Length
+    dtype: int
+    default: 4
+
+  - id: sync_word
+    label: Synchronization Word
+    dtype: raw
+    default: [0x31, 0xe5]
+
+  - id: frame_len
+    label: (Maximum) Frame Length
+    dtype: int
+    default: 240
+
+# Happy hacky times again...
+value: ${ str(id) }
+
+templates:
+  imports: import gnuradio.uniclogs as uniclogs
+  var_make: |-
+    self.${id} = ${id} = uniclogs.ieee802_15_4_encoder.make(${preamble}, ${preamble_len}, ${sync_word}, ${frame_len})
+
+file_format: 1

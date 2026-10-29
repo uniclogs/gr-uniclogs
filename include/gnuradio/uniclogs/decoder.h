@@ -39,9 +39,9 @@ typedef class decoder_status decoder_status_t;
 /**
  * \brief Abstract class that provided the API for the c decoders
  *
- * This is an abstract class providing the API for the SatNOGS decoders.
+ * This is an abstract class providing the API for the uniclogs decoders.
  *
- * The gr-satnogs module tries to provide a unified decoding framework,
+ * The gr-uniclogs module tries to provide a unified decoding framework,
  * for various satellites.
  * Specialization is performed by passing to the generic decoding block the
  * appropriate decoder class that implements this abstract class API.

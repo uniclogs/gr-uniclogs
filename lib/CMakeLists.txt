@@ -18,7 +18,10 @@ list(APPEND uniclogs_sources
     metadata.cc
     viterbi/viterbi.cc
     frame_decoder_impl.cc
-    encoder.cc)
+    encoder.cc
+    ieee802_15_4_encode.cc
+    frame_encoder_impl.cc
+    ieee802_15_4_encoder.cc)
 
 
 set(uniclogs_sources

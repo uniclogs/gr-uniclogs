@@ -1,3 +1,7 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <gnuradio/io_signature.h>
 #include <gnuradio/uniclogs/encoder.h>
 
@@ -11,5 +15,6 @@ encoder::encoder() : d_id(base_unique_id++) {}
 encoder::~encoder() {}
 
 int encoder::unique_id() const { return d_id; }
+
 } /* namespace uniclogs */
 } /* namespace gr */
