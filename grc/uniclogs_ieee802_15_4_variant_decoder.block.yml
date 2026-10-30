@@ -17,7 +17,8 @@ parameters:
   - id: sync_word
     label: Synchronization Word
     dtype: raw
-    default: [0x90, 0x4e]
+    default: [0x90, 0x4e]        # This works for rx_fec_recording_3
+    #        [0x6f, 0x4e]        # This works for 20db_pocketbeagle
 
   - id: sync_thrsh
     label: Synchronization Word Threshold
@@ -32,7 +33,8 @@ parameters:
   - id: length_little_endian
     label: Length field LSB first (little endian)
     dtype: bool
-    default: true
+    default: true                  # This works for rx_fec_recording_3
+    #        false                 # This works for 20db_pocketbeagle
 
 value: ${ str(id) }
 
