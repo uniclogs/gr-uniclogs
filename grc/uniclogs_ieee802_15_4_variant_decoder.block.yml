@@ -17,7 +17,7 @@ parameters:
   - id: sync_word
     label: Synchronization Word
     dtype: raw
-    default: [0x31, 0xe5]
+    default: [0x90, 0x4e]
 
   - id: sync_thrsh
     label: Synchronization Word Threshold
