@@ -4,7 +4,6 @@
 
 #include <gnuradio/io_signature.h>
 #include <gnuradio/uniclogs/ieee802_15_4_encoder.h>
-#include <iterator>
 
 namespace gr {
 namespace uniclogs {
@@ -44,9 +43,10 @@ ieee802_15_4_encoder::ieee802_15_4_encoder(uint8_t preamble,
     std::copy(sync_word.begin(), sync_word.end(), d_buffer + preamble_len);
     // TODO: Once we move to a nonstatic PHR, i.e. when we have FEC functional
     // need to add the flags for FEC and eventually data whitening into the PHR
-    uint16_t d_phr = (uint16_t)(d_max_frame_len);
+    d_buffer[preamble_len+sync_word.size()+0] = 0x00;
+    d_buffer[preamble_len+sync_word.size()+1] = (uint8_t)d_max_frame_len;
     // address which we want to add the payload
-    d_payload = d_buffer + preamble_len + sync_word.size() + d_phr;
+    d_payload = d_buffer + preamble_len + sync_word.size() + 2;
 }
 
 
