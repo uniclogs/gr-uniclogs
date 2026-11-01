@@ -1,4 +1,3 @@
-#include "viterbi/viterbi.h"
 #include <gnuradio/io_signature.h>
 #include <gnuradio/pdu.h>
 #include <gnuradio/uniclogs/ieee802_15_4_variant_decoder.h>
@@ -12,33 +11,18 @@ ieee802_15_4_variant_decoder::sptr
 ieee802_15_4_variant_decoder::make(const std::vector<uint8_t>& preamble,
                                    size_t preamble_threshold,
                                    const std::vector<uint8_t>& sync,
-                                   size_t sync_threshold,
-                                   int constraint,
-                                   const std::vector<int>& polynomials,
-                                   bool fec)
+                                   size_t sync_threshold)
 {
-    return ieee802_15_4_variant_decoder::sptr(
-        new ieee802_15_4_variant_decoder(preamble,
-                                         preamble_threshold,
-                                         sync,
-                                         sync_threshold,
-                                         constraint,
-                                         polynomials,
-                                         fec));
+    return ieee802_15_4_variant_decoder::sptr(new ieee802_15_4_variant_decoder(
+        preamble, preamble_threshold, sync, sync_threshold));
 }
 
 ieee802_15_4_variant_decoder::ieee802_15_4_variant_decoder(
     const std::vector<uint8_t>& preamble,
     size_t preamble_threshold,
     const std::vector<uint8_t>& sync,
-    size_t sync_threshold,
-    int constraint,
-    const std::vector<int>& polynomials,
-    bool fec)
-    : decoder("IEEE-802.15.4",
-              "1.1",
-              sizeof(uint8_t),
-              ((size_t)1 << (2 * 8))),
+    size_t sync_threshold)
+    : decoder("IEEE-802.15.4", "1.1", sizeof(uint8_t), ((size_t)1 << (2 * 8))),
       d_preamble(preamble.size() * 8),
       d_preamble_shift_reg(preamble.size() * 8),
       d_preamble_len(preamble.size() * 8),
@@ -51,10 +35,8 @@ ieee802_15_4_variant_decoder::ieee802_15_4_variant_decoder(
       d_length_field_len(2),
       d_state(SEARCHING),
       d_cnt(0),
-      d_fec(fec),
       d_frame_start_idx(0),
-      d_max_frame_len(((size_t)1 << (2 * 8))),
-      d_codec(constraint, polynomials)
+      d_max_frame_len(((size_t)1 << (2 * 8)))
 {
     for (uint8_t b : preamble) {
         d_preamble <<= (b >> 7);
@@ -127,11 +109,7 @@ decoder_status_t ieee802_15_4_variant_decoder::decode(const void* in, int len)
         status.consumed = search_sync((const uint8_t*)in, len);
         break;
     case DECODING_GENERIC_FRAME_LEN:
-        if (d_fec == true) {
-            status.consumed = decode_frame_len((const uint8_t*)in);
-        } else {
-            status.consumed = decode_frame_len_fec((const uint8_t*)in);
-        }
+        status.consumed = decode_frame_len((const uint8_t*)in);
         break;
     case DECODING_PAYLOAD:
         decode_payload(status, (const uint8_t*)in, len);
@@ -210,31 +188,6 @@ int ieee802_15_4_variant_decoder::decode_frame_len(const uint8_t* in)
     b = 0x07FF & b;
     d_len = b;
     d_cnt = d_length_field_len;
-    d_state = DECODING_PAYLOAD;
-    return 8 * d_length_field_len;
-}
-
-int ieee802_15_4_variant_decoder::decode_frame_len_fec(const uint8_t* in)
-{
-    uint8_t* bytes = new uint8_t[d_length_field_len];
-    for (size_t i = 0; i < d_length_field_len; i++) {
-        printf("%x \r", in[i]);
-        uint8_t b = 0x0;
-        b = in[i * 8 + 7] << 0;
-        b |= in[i * 8 + 6] << 1;
-        b |= in[i * 8 + 5] << 2;
-        b |= in[i * 8 + 4] << 3;
-        b |= in[i * 8 + 3] << 4;
-        b |= in[i * 8 + 2] << 5;
-        b |= in[i * 8 + 1] << 6;
-        b |= in[i * 8 + 0] << 7;
-        bytes[i] = b;
-    }
-
-    uint32_t b = (bytes[0] << 8 | bytes[1]);
-    printf("%x \r", b);
-
-    d_len = b;
     d_state = DECODING_PAYLOAD;
     return 8 * d_length_field_len;
 }

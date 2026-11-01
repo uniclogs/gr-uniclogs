@@ -14,7 +14,7 @@
 /* BINDTOOL_GEN_AUTOMATIC(0)                                                       */
 /* BINDTOOL_USE_PYGCCXML(0)                                                        */
 /* BINDTOOL_HEADER_FILE(ieee802_15_4_variant_decoder.h) */
-/* BINDTOOL_HEADER_FILE_HASH(032cebbbbedcba8f2922a27eb6c4bf68)                     */
+/* BINDTOOL_HEADER_FILE_HASH(d0290c263b78eff6dd53cfc8e9c33ccf)                     */
 /***********************************************************************************/
 
 #include <pybind11/complex.h>
@@ -43,9 +43,6 @@ void bind_ieee802_15_4_variant_decoder(py::module& m)
              py::arg("preamble_threshold"),
              py::arg("sync"),
              py::arg("sync_threshold"),
-             py::arg("constraint"),
-             py::arg("polynomials"),
-             py::arg("fec"),
              D(ieee802_15_4_variant_decoder, make))
 
 

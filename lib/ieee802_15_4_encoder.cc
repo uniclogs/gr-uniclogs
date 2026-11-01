@@ -22,7 +22,7 @@ ieee802_15_4_encoder::ieee802_15_4_encoder(uint8_t preamble,
                                            const std::vector<uint8_t>& sync_word,
                                            size_t frame_len)
     : d_max_frame_len(frame_len),
-      d_preamle_len(preamble_len),
+      d_preamble_len(preamble_len),
       d_var_len(0),
       d_length_field_bytes(0)
 {

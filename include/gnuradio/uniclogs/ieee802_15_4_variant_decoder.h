@@ -52,18 +52,12 @@ public:
     static sptr make(const std::vector<uint8_t>& preamble,
                      size_t preamble_threshold,
                      const std::vector<uint8_t>& sync,
-                     size_t sync_threshold,
-                     int constraint,
-                     const std::vector<int>& polynomials,
-                     bool fec);
+                     size_t sync_threshold);
 
     ieee802_15_4_variant_decoder(const std::vector<uint8_t>& preamble,
                                  size_t preamble_threshold,
                                  const std::vector<uint8_t>& sync,
-                                 size_t sync_threshold,
-                                 int constraint,
-                                 const std::vector<int>& polynomials,
-                                 bool fec);
+                                 size_t sync_threshold);
 
     ~ieee802_15_4_variant_decoder();
 
@@ -97,18 +91,15 @@ private:
     size_t d_length_field_len;
     decoding_state_t d_state;
     size_t d_cnt;
-    bool d_fec;
     uint64_t d_frame_start_idx;
     uint8_t* d_pdu;
     size_t d_max_frame_len;
-    ViterbiCodec d_codec;
 
     int search_preamble(const uint8_t* in, int len);
 
     int search_sync(const uint8_t* in, int len);
 
     int decode_frame_len(const uint8_t* in);
-    int decode_frame_len_fec(const uint8_t* in);
 
     void decode_payload(decoder_status_t& status, const uint8_t* in, int len);
 };

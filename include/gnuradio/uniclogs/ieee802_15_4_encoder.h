@@ -25,13 +25,14 @@ public:
                          size_t preamble_len,
                          const std::vector<uint8_t>& sync_word,
                          size_t frame_len);
+
     ~ieee802_15_4_encoder();
 
     pmt::pmt_t encode(pmt::pmt_t msg);
 
 private:
     const size_t d_max_frame_len;
-    const size_t d_preamle_len;
+    const size_t d_preamble_len;
     const bool d_var_len = 0;
     uint8_t* d_buffer;
     uint8_t* d_payload;
