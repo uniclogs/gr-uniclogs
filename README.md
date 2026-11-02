@@ -4,8 +4,11 @@ In order to build gr-uniclogs you need:
 
 * make
 * CMake
-* gr_modtool, used to update python bindings
+* gnuradio
+    - debian package: gnuradio
+    - arch packages: gnuradio gnuradio-utils
 * just (optional), used with the justfile as a command runner
+
 
 ```
 mkdir build && cd build
@@ -19,7 +22,7 @@ sudo make install
 ```
 
 The CMake will use the default installation prefix.
-If your using Linux, depending on your distrubution your installation path may vary.
+If your using Linux, depending on your distribution your installation path may vary.
 Use the `CMAKE_INSTALL_PREFIX` flag to set your path.
 
 ```

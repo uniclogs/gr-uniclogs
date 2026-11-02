@@ -7,6 +7,9 @@ path = "**"
 SPDX-FileCopyrightText = "2026 Portland State Aerospace Society <aerospace@pdx.edu>"
 SPDX-License-Identifier = "GPL-3.0-or-later"
 
+# From gr-satnogs, a lot derived from this repo for
+# IEEE 802.15.4 usage with gnuradio
+# https://gitlab.com/librespacefoundation/satnogs/gr-satnogs
 [[annotations]]
 path = [
   "./lib/decoder.cc",
@@ -28,6 +31,9 @@ path = [
 SPDX-FileCopyrightText = "2019-2023, Libre Space Foundation <http://libre.space>"
 SPDX-License-Identifier = "GPL-3.0-or-later"
 
+# Taken from gr-satnogs, which took it from HowardHinnant/date
+# https://gitlab.com/librespacefoundation/satnogs/gr-satnogs
+# https://github.com/HowardHinnant/date/blob/master/include/date/date.h
 [[annotations]]
 path = "./include/gnuradio/uniclogs/date.h"
 precedence = "aggregate"
@@ -40,8 +46,12 @@ SPDX-FileCopyrightText = [
   "2018, 2019 Tomasz Kamiński",
   "2019 Jiangang Zhuang",
 ]
+SPDX-License-Identifier = "MIT"
 
+# Taken from gr-satellites, which took it from xukmin/viterbi on github
+# https://github.com/xukmin/viterbi
+# https://github.com/daniestevez/gr-satellites
 [[annotations]]
 path = ["./include/gnuradio/uniclogs/viterbi.h", "./lib/viterbi/**"]
 precedence = "aggregate"
-SPDX-License-Identifier = "Apache V2.0"
+SPDX-License-Identifier = "Apache-2.0"
