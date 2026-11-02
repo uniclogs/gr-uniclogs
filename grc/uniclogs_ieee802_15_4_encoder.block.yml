@@ -30,6 +30,6 @@ value: ${ str(id) }
 templates:
   imports: import gnuradio.uniclogs as uniclogs
   make:
-    self.${id} = ${id} = uniclogs.ieee802_15_4_encoder.make(${preamble}, ${preamble_len}, ${sync_word}, ${frame_len})
+    self.${id} = ${id} = uniclogs.ieee802_15_4_encoder(${preamble}, ${preamble_len}, ${sync_word}, ${frame_len})
 
 file_format: 1

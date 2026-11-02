@@ -1,5 +1,5 @@
 id: uniclogs_frame_encoder
-label: Frame Encoder
+label: Uniclogs Frame Encoder
 category: '[uniclogs]'
 
 parameters:

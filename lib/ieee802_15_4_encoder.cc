@@ -31,7 +31,7 @@ ieee802_15_4_encoder::ieee802_15_4_encoder(uint8_t preamble,
         throw std::invalid_argument(
             "ieee802_15_4_encoder: SYNC word should be at least one byte");
     }
-    if (d_max_frame_len > 2047) {
+    if (d_max_frame_len > 2047*8) {
         throw std::invalid_argument(
             "ieee802_15_4_encoder: Frame len should not be bigger than 2047 bits");
     }
