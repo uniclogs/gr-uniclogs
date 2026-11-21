@@ -62,20 +62,6 @@ pmt::pmt_t ieee802_15_4_encoder::encode(pmt::pmt_t msg)
                                  "than the maximum allowed");
     }
 
-    if (d_var_len) {
-        uint8_t* out = new uint8_t[d_length_field_bytes]();
-        size_t tmp_pdu_len = pdu_len;
-
-        for (size_t i = 0; i < d_length_field_bytes; i++) {
-            out[d_length_field_bytes - 1 - i] = (uint8_t)(tmp_pdu_len & 0xFF);
-            tmp_pdu_len >>= 8;
-        }
-
-        for (size_t i = 0; i < d_length_field_bytes; i++)
-            *d_buffer++ = out[i];
-    }
-
-
     // fill the buffer with the preamble
     std::fill_n(d_buffer, d_preamble_len, d_preamble);
     // copy sync word into the buffer after the preamble
