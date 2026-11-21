@@ -25,6 +25,11 @@ parameters:
     dtype: int
     default: 3
 
+  - id: FEC_toggle
+    label: Toggle FEC
+    dtype: bool
+    default: true
+
   - id: invert_payload
     label: Invert payload bits
     dtype: bool
@@ -41,6 +46,6 @@ value: ${ str(id) }
 templates:
   imports: import gnuradio.uniclogs as uniclogs
   var_make: |-
-    self.${id} = ${id} = uniclogs.ieee802_15_4_variant_decoder(${preamble}, ${preamble_thrsh}, ${sync_word}, ${sync_thrsh}, ${invert_payload}, ${length_little_endian})
+    self.${id} = ${id} = uniclogs.ieee802_15_4_variant_decoder(${preamble}, ${preamble_thrsh}, ${sync_word}, ${sync_thrsh}, ${FEC_toggle}, ${invert_payload}, ${length_little_endian})
 
 file_format: 1

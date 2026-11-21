@@ -23,11 +23,6 @@ static const char*
         R"doc()doc";
 
 
-static const char*
-    __doc_gr_uniclogs_ieee802_15_4_variant_decoder_ieee802_15_4_variant_decoder_1 =
-        R"doc()doc";
-
-
 static const char* __doc_gr_uniclogs_ieee802_15_4_variant_decoder_make = R"doc()doc";
 
 
@@ -35,7 +30,3 @@ static const char* __doc_gr_uniclogs_ieee802_15_4_variant_decoder_decode = R"doc
 
 
 static const char* __doc_gr_uniclogs_ieee802_15_4_variant_decoder_reset = R"doc()doc";
-
-
-static const char* __doc_gr_uniclogs_ieee802_15_4_variant_decoder_input_multiple =
-    R"doc()doc";

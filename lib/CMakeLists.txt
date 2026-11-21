@@ -17,8 +17,10 @@ list(APPEND uniclogs_sources
     viterbi_frame_decoder.cc
     frame_extractor.cc
     frame_decoder_impl.cc
+    frame_encoder_impl.cc
     ieee802_15_4_variant_decoder.cc
-    metadata.cc 
+    ieee802_15_4_encoder.cc
+    metadata.cc
     shift_reg.cc)
 
 

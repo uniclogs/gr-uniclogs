@@ -1,4 +1,4 @@
-// This is a port of a Python implementation of a k=4 Viterbi decoder, meant 
+// This is a port of a Python implementation of a k=4 Viterbi decoder, meant
 // to be called by a program capable of parsing messages from a bitstream.
 //
 // Input: vector of coded bits
@@ -97,7 +97,7 @@ FrameDecoder::Trellis FrameDecoder::run_trellis(const std::vector<uint8_t>& code
     return trellis;
 }
 
-// Traceback, fetches ordered input bits based on recorded trellis 
+// Traceback, fetches ordered input bits based on recorded trellis
 std::vector<uint8_t> FrameDecoder::traceback(const Trellis& trellis, int end_state) const {
     const size_t steps = trellis.decisions.size();
     std::vector<uint8_t> bits(steps, 0);
@@ -106,7 +106,7 @@ std::vector<uint8_t> FrameDecoder::traceback(const Trellis& trellis, int end_sta
     for (size_t t = steps; t --> 0;) {
         // Input bit that led into current state is top bit
         bits[t] = static_cast<uint8_t>(state >> 2);
-        // Move to surviving predecessor, lower two bits become upper 
+        // Move to surviving predecessor, lower two bits become upper
         // two bits and recorded decision becomes new lower bit
         state = ((state & 3) << 1) | trellis.decisions[t][state];
     }
@@ -160,7 +160,7 @@ DecodeResult FrameDecoder::decode(const std::vector<uint8_t>& coded) const {
         result.status = header_status;
         return result;
     }
-    
+
     // Total coded bits in the whole frame, now that the length is known
     result.coded_bits_needed = coded_bits_for_message(message_bytes);
 

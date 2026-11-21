@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <memory>
 #include <vector>
+#include "shift_reg.h"
 
 // The real work is done by classes private to lib/. They are only declared
 // here (not included), so this installed header does not depend on them.
@@ -55,6 +56,7 @@ public:
                      size_t preamble_threshold,
                      const std::vector<uint8_t>& sync,
                      size_t sync_threshold,
+                     bool FEC_toggle,
                      bool invert_payload,
                      bool length_little_endian);
 
@@ -62,6 +64,7 @@ public:
                                  size_t preamble_threshold,
                                  const std::vector<uint8_t>& sync,
                                  size_t sync_threshold,
+                                 bool FEC_toggle,
                                  bool invert_payload,
                                  bool length_little_endian);
 
@@ -73,6 +76,35 @@ public:
 
 private:
     std::unique_ptr<uniclogs_fec::FrameExtractor> d_extractor;
+
+    typedef enum {
+            SEARCHING,                  //!< when searching for the start of the preamble
+            SEARCHING_SYNC,             //!< We have preamble, search for sync
+            DECODING_GENERIC_FRAME_LEN, //!< Decoding the frame length
+            DECODING_PAYLOAD            //!< Decoding the payload
+    } decoding_state_t;
+
+    shift_reg d_preamble;
+    shift_reg d_preamble_shift_reg;
+    const size_t d_preamble_len;
+    const size_t d_preamble_thrsh;
+    shift_reg d_sync;
+    shift_reg d_sync_shift_reg;
+    const size_t d_sync_len;
+    const size_t d_sync_thrsh;
+    size_t d_len;
+    size_t d_length_field_len;
+    decoding_state_t d_state;
+    size_t d_cnt;
+    uint64_t d_frame_start_idx;
+    uint8_t* d_pdu;
+    size_t d_max_frame_len;
+
+    bool d_FEC_toggle;
+    int decode_frame_len(const uint8_t* in);
+    int search_preamble(const uint8_t* in, int len);
+    int search_sync(const uint8_t* in, int len);
+    void decode_payload(decoder_status_t& status, const uint8_t* in, int len);
 };
 
 } // namespace uniclogs
