@@ -33,7 +33,9 @@ public:
 private:
     const size_t d_max_frame_len;
     const size_t d_preamble_len;
+    const uint8_t d_preamble;
     const bool d_var_len = 0;
+    std::vector<uint8_t> d_sync_word;
     uint8_t* d_buffer;
     uint8_t* d_payload;
     uint8_t* d_buffer_frame_len;
