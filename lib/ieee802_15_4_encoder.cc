@@ -38,8 +38,8 @@ ieee802_15_4_encoder::ieee802_15_4_encoder(uint8_t preamble,
     }
 
     d_sync_word = {sync_word[0], sync_word[1]};
-    // TODO: Add payload length checker
-    d_buffer = new uint8_t[d_preamble_len + d_sync_word.size() + 2 + d_max_frame_len];
+
+    d_buffer = new uint8_t[d_preamble_len + d_sync_word.size() + 2];
 }
 
 
