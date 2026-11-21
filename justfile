@@ -11,7 +11,12 @@ build:
   {{ cmake_cmd }}
   {{ make_cmd }}
 
-install: build
+instl-build: build
+	#!/usr/bin/env bash
+	cd build
+	sudo make install
+
+install:
   #!/usr/bin/env bash
   cd build
   sudo make install

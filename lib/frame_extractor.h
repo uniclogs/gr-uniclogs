@@ -18,7 +18,7 @@ namespace uniclogs_fec {
 
 // Most recent N bits received, oldest first
 class BitWindow {
-    
+
     public:
         explicit BitWindow(size_t size = 0);
         void push(uint8_t bit);                                         // new bit in, old bit out
@@ -41,12 +41,12 @@ class FrameExtractor {
                             bool invert_payload,                 /*   Whether or not to fliip every bit AFTER the sync word. This does not affect preamble or sync comparison   */
 			    bool length_lsb_first = true);       /*   Bit order of the length segment of the header                                                             */
 
-        // Get rid of all current information and return to searching for preamble 
-        void reset();               
-        
+        // Get rid of all current information and return to searching for preamble
+        void reset();
+
         // Feed up to len stream items, returning how many were consumed
         size_t process(const uint8_t* in, size_t len);
-            
+
         // Decoded message bits, mvoes data out and clears frame_ready()
         std::vector<uint8_t> take_message();
 
@@ -54,7 +54,7 @@ class FrameExtractor {
         uint64_t frame_start_index() const { return ready_start_; }
         uint64_t frame_end_index() const { return ready_end_; }
 
-    private: 
+    private:
         enum class State { kSearchingPreamble, kSearchingSync, kCollectingFrame };
 
         void restart_search();
@@ -83,7 +83,7 @@ class FrameExtractor {
         // ---- frame collection ----
         std::vector<uint8_t> coded_;         // polarity-corrected coded bits so far
         size_t decode_at_;                   // try decoding once this many are collected
- 
+
         // ---- finished frame, kept until taken or the next process() call ----
         bool frame_ready_;
         std::vector<uint8_t> message_;
