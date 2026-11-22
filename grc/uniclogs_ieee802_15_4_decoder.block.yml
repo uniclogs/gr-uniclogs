@@ -1,4 +1,4 @@
-id: uniclogs_ieee802_15_4_variant_decoder
+id: uniclogs_ieee802_15_4_decoder
 label: IEEE 802.15.4 Variable Decoder Definition
 category: "[uniclogs]"
 flags: [show_id]
@@ -46,6 +46,6 @@ value: ${ str(id) }
 templates:
   imports: import gnuradio.uniclogs as uniclogs
   var_make: |-
-    self.${id} = ${id} = uniclogs.ieee802_15_4_variant_decoder(${preamble}, ${preamble_thrsh}, ${sync_word}, ${sync_thrsh}, ${FEC_toggle}, ${invert_payload}, ${length_little_endian})
+    self.${id} = ${id} = uniclogs.ieee802_15_4_decoder(${preamble}, ${preamble_thrsh}, ${sync_word}, ${sync_thrsh}, ${FEC_toggle}, ${invert_payload}, ${length_little_endian})
 
 file_format: 1

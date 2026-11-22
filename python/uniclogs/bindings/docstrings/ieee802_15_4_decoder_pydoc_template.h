@@ -15,18 +15,18 @@
  */
 
 
-static const char* __doc_gr_uniclogs_ieee802_15_4_variant_decoder = R"doc()doc";
+static const char* __doc_gr_uniclogs_ieee802_15_4_decoder = R"doc()doc";
 
 
 static const char*
-    __doc_gr_uniclogs_ieee802_15_4_variant_decoder_ieee802_15_4_variant_decoder_0 =
+    __doc_gr_uniclogs_ieee802_15_4_decoder_ieee802_15_4_decoder_0 =
         R"doc()doc";
 
 
-static const char* __doc_gr_uniclogs_ieee802_15_4_variant_decoder_make = R"doc()doc";
+static const char* __doc_gr_uniclogs_ieee802_15_4_decoder_make = R"doc()doc";
 
 
-static const char* __doc_gr_uniclogs_ieee802_15_4_variant_decoder_decode = R"doc()doc";
+static const char* __doc_gr_uniclogs_ieee802_15_4_decoder_decode = R"doc()doc";
 
 
-static const char* __doc_gr_uniclogs_ieee802_15_4_variant_decoder_reset = R"doc()doc";
+static const char* __doc_gr_uniclogs_ieee802_15_4_decoder_reset = R"doc()doc";

@@ -13,8 +13,8 @@
 /* If manual edits are made, the following tags should be modified accordingly.    */
 /* BINDTOOL_GEN_AUTOMATIC(0)                                                       */
 /* BINDTOOL_USE_PYGCCXML(0)                                                        */
-/* BINDTOOL_HEADER_FILE(ieee802_15_4_variant_decoder.h) */
-/* BINDTOOL_HEADER_FILE_HASH(855ee69c5e6bd50ac228d2cd9cb00267)                     */
+/* BINDTOOL_HEADER_FILE(ieee802_15_4_decoder.h) */
+/* BINDTOOL_HEADER_FILE_HASH(8f6d8b9e821cca4ec93b3e3deb2b74ea)                     */
 /***********************************************************************************/
 
 #include <pybind11/complex.h>
@@ -23,22 +23,22 @@
 
 namespace py = pybind11;
 
-#include <gnuradio/uniclogs/ieee802_15_4_variant_decoder.h>
+#include <gnuradio/uniclogs/ieee802_15_4_decoder.h>
 // pydoc.h is automatically generated in the build directory
-#include <ieee802_15_4_variant_decoder_pydoc.h>
+#include <ieee802_15_4_decoder_pydoc.h>
 
-void bind_ieee802_15_4_variant_decoder(py::module& m)
+void bind_ieee802_15_4_decoder(py::module& m)
 {
 
-    using ieee802_15_4_variant_decoder = ::gr::uniclogs::ieee802_15_4_variant_decoder;
+    using ieee802_15_4_decoder = ::gr::uniclogs::ieee802_15_4_decoder;
 
 
-    py::class_<ieee802_15_4_variant_decoder,
+    py::class_<ieee802_15_4_decoder,
                gr::uniclogs::decoder,
-               std::shared_ptr<ieee802_15_4_variant_decoder>>(
-        m, "ieee802_15_4_variant_decoder", D(ieee802_15_4_variant_decoder))
+               std::shared_ptr<ieee802_15_4_decoder>>(
+        m, "ieee802_15_4_decoder", D(ieee802_15_4_decoder))
 
-        .def(py::init(&ieee802_15_4_variant_decoder::make),
+        .def(py::init(&ieee802_15_4_decoder::make),
              py::arg("preamble"),
              py::arg("preamble_threshold"),
              py::arg("sync"),
@@ -46,19 +46,19 @@ void bind_ieee802_15_4_variant_decoder(py::module& m)
              py::arg("FEC_toggle"),
              py::arg("invert_payload"),
              py::arg("length_little_endian"),
-             D(ieee802_15_4_variant_decoder, make))
+             D(ieee802_15_4_decoder, make))
 
 
         .def("decode",
-             &ieee802_15_4_variant_decoder::decode,
+             &ieee802_15_4_decoder::decode,
              py::arg("in"),
              py::arg("len"),
-             D(ieee802_15_4_variant_decoder, decode))
+             D(ieee802_15_4_decoder, decode))
 
 
         .def("reset",
-             &ieee802_15_4_variant_decoder::reset,
-             D(ieee802_15_4_variant_decoder, reset))
+             &ieee802_15_4_decoder::reset,
+             D(ieee802_15_4_decoder, reset))
 
         ;
 }

@@ -1,5 +1,5 @@
-#ifndef INCLUDED_UNICLOGS_IEEE802_15_4_VARIANT_DECODER_H
-#define INCLUDED_UNICLOGS_IEEE802_15_4_VARIANT_DECODER_H
+#ifndef INCLUDED_UNICLOGS_IEEE802_15_4_DECODER_H
+#define INCLUDED_UNICLOGS_IEEE802_15_4_DECODER_H
 
 #include <gnuradio/uniclogs/api.h>
 #include <gnuradio/uniclogs/decoder.h>
@@ -28,10 +28,10 @@ namespace uniclogs {
  * Frame layout after the sync word, as decoded bits: 5 zero bits, an 11-bit
  * length in bytes, 8*length message bits, 3 tail bits.
  */
-class UNICLOGS_API ieee802_15_4_variant_decoder : public gr::uniclogs::decoder
+class UNICLOGS_API ieee802_15_4_decoder : public gr::uniclogs::decoder
 {
 public:
-    using sptr = std::shared_ptr<ieee802_15_4_variant_decoder>;
+    using sptr = std::shared_ptr<ieee802_15_4_decoder>;
 
     /**
      * @param preamble pattern bytes, sent most significant bit first. A repeated
@@ -60,7 +60,7 @@ public:
                      bool invert_payload,
                      bool length_little_endian);
 
-    ieee802_15_4_variant_decoder(const std::vector<uint8_t>& preamble,
+    ieee802_15_4_decoder(const std::vector<uint8_t>& preamble,
                                  size_t preamble_threshold,
                                  const std::vector<uint8_t>& sync,
                                  size_t sync_threshold,
@@ -68,7 +68,7 @@ public:
                                  bool invert_payload,
                                  bool length_little_endian);
 
-    ~ieee802_15_4_variant_decoder();
+    ~ieee802_15_4_decoder();
 
     decoder_status_t decode(const void* in, int len);
 
@@ -110,4 +110,4 @@ private:
 } // namespace uniclogs
 } // namespace gr
 
-#endif /* INCLUDED_UNICLOGS_IEEE802_15_4_VARIANT_DECODER_H */
+#endif /* INCLUDED_UNICLOGS_IEEE802_15_4_DECODER_H */

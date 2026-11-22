@@ -18,7 +18,7 @@ list(APPEND uniclogs_sources
     frame_extractor.cc
     frame_decoder_impl.cc
     frame_encoder_impl.cc
-    ieee802_15_4_variant_decoder.cc
+    ieee802_15_4_decoder.cc
     ieee802_15_4_encoder.cc
     metadata.cc
     shift_reg.cc)

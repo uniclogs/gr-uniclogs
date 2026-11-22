@@ -7,7 +7,7 @@
 #include "frame_extractor.h"
 #include <gnuradio/io_signature.h>
 #include <gnuradio/pdu.h>
-#include <gnuradio/uniclogs/ieee802_15_4_variant_decoder.h>
+#include <gnuradio/uniclogs/ieee802_15_4_decoder.h>
 #include <gnuradio/uniclogs/metadata.h>
 #include <pmt/pmt.h>
 
@@ -20,8 +20,8 @@ namespace {
 constexpr bool kPackLsbFirst = true;
 } // namespace
 
-ieee802_15_4_variant_decoder::sptr
-ieee802_15_4_variant_decoder::make(const std::vector<uint8_t>& preamble,
+ieee802_15_4_decoder::sptr
+ieee802_15_4_decoder::make(const std::vector<uint8_t>& preamble,
                                    size_t preamble_threshold,
                                    const std::vector<uint8_t>& sync,
                                    size_t sync_threshold,
@@ -30,8 +30,8 @@ ieee802_15_4_variant_decoder::make(const std::vector<uint8_t>& preamble,
                                    bool length_little_endian)
 {
 
-    return ieee802_15_4_variant_decoder::sptr(
-        new ieee802_15_4_variant_decoder(preamble,
+    return ieee802_15_4_decoder::sptr(
+        new ieee802_15_4_decoder(preamble,
                                          preamble_threshold,
                                          sync,
                                          sync_threshold,
@@ -40,7 +40,7 @@ ieee802_15_4_variant_decoder::make(const std::vector<uint8_t>& preamble,
                                          length_little_endian));
 }
 
-ieee802_15_4_variant_decoder::ieee802_15_4_variant_decoder(
+ieee802_15_4_decoder::ieee802_15_4_decoder(
     const std::vector<uint8_t>& preamble,
     size_t preamble_threshold,
     const std::vector<uint8_t>& sync,
@@ -116,9 +116,9 @@ ieee802_15_4_variant_decoder::ieee802_15_4_variant_decoder(
     // FrameExtractor throws std::invalid_argument on bad thresholds/sync length
 }
 
-ieee802_15_4_variant_decoder::~ieee802_15_4_variant_decoder() {}
+ieee802_15_4_decoder::~ieee802_15_4_decoder() {}
 
-void ieee802_15_4_variant_decoder::reset()
+void ieee802_15_4_decoder::reset()
 {
     d_extractor->reset();
     d_cnt = 0;
@@ -132,7 +132,7 @@ void ieee802_15_4_variant_decoder::reset()
     d_sync_shift_reg.reset();
 }
 
-decoder_status_t ieee802_15_4_variant_decoder::decode(const void* in, int len)
+decoder_status_t ieee802_15_4_decoder::decode(const void* in, int len)
 {
     decoder_status_t status;
     if (len <= 0) {
@@ -181,7 +181,7 @@ decoder_status_t ieee802_15_4_variant_decoder::decode(const void* in, int len)
             decode_payload(status, (const uint8_t*)in, len);
             break;
         default:
-            throw std::runtime_error("ieee802_15_4_variant_decoder: Invalid state");
+            throw std::runtime_error("ieee802_15_4_decoder: Invalid state");
         }
     }
 
@@ -191,7 +191,7 @@ decoder_status_t ieee802_15_4_variant_decoder::decode(const void* in, int len)
 }
 
 
-int ieee802_15_4_variant_decoder::search_preamble(const uint8_t* in, int len)
+int ieee802_15_4_decoder::search_preamble(const uint8_t* in, int len)
 {
     for (int i = 0; i < len; i++) {
         d_preamble_shift_reg <<= in[i];
@@ -206,7 +206,7 @@ int ieee802_15_4_variant_decoder::search_preamble(const uint8_t* in, int len)
     return len;
 }
 
-int ieee802_15_4_variant_decoder::search_sync(const uint8_t* in, int len)
+int ieee802_15_4_decoder::search_sync(const uint8_t* in, int len)
 {
     for (int i = 0; i < len; i++) {
         d_sync_shift_reg <<= in[i];
@@ -227,7 +227,7 @@ int ieee802_15_4_variant_decoder::search_sync(const uint8_t* in, int len)
     return len;
 }
 
-int ieee802_15_4_variant_decoder::decode_frame_len(const uint8_t* in)
+int ieee802_15_4_decoder::decode_frame_len(const uint8_t* in)
 {
     uint32_t b = 0x0;
     uint8_t* bytes = new uint8_t[d_length_field_len];
@@ -255,7 +255,7 @@ int ieee802_15_4_variant_decoder::decode_frame_len(const uint8_t* in)
     return 8 * d_length_field_len;
 }
 
-void ieee802_15_4_variant_decoder::decode_payload(decoder_status_t& status,
+void ieee802_15_4_decoder::decode_payload(decoder_status_t& status,
                                                   const uint8_t* in,
                                                   int len)
 {
