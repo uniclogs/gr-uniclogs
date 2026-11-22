@@ -38,12 +38,12 @@ ieee802_15_4_encoder::ieee802_15_4_encoder(uint8_t preamble,
     }
 
     d_sync_word = {sync_word[0], sync_word[1]};
-
-    d_buffer = new uint8_t[d_preamble_len + d_sync_word.size() + 2];
+    d_buffer.reserve(d_max_frame_len);
+   // = new uint8_t[d_preamble_len + d_sync_word.size() + 2];
 }
 
 
-ieee802_15_4_encoder::~ieee802_15_4_encoder() { delete[] d_buffer; }
+ieee802_15_4_encoder::~ieee802_15_4_encoder() { }
 
 pmt::pmt_t ieee802_15_4_encoder::encode(pmt::pmt_t msg)
 {
@@ -63,22 +63,25 @@ pmt::pmt_t ieee802_15_4_encoder::encode(pmt::pmt_t msg)
     }
 
     // fill the buffer with the preamble
-    std::fill_n(d_buffer, d_preamble_len, d_preamble);
-    // copy sync word into the buffer after the preamble
-    std::copy(d_sync_word.begin(), d_sync_word.end(), d_buffer+d_preamble_len);
-
+    for (size_t i = 0; i < d_preamble_len; i++)
+      d_buffer.push_back(d_preamble);
+    // add in sync word into the buffer after the preamble
+    d_buffer.push_back(d_sync_word[0]);
+    d_buffer.push_back(d_sync_word[1]);
     // TODO: Once we move to a nonstatic PHR, i.e. when we have FEC functional
     // need to add the flags for FEC and eventually data whitening into the PHR
     uint16_t payload_len = 0x07FF & pdu_len;
-    d_buffer[d_preamble_len+d_sync_word.size()+0] = (uint8_t)(0xFF & (payload_len >> 8));
-    d_buffer[d_preamble_len+d_sync_word.size()+1] = (uint8_t)(0xFF  & payload_len);
+    d_buffer.push_back((uint8_t)(0xFF & (payload_len >> 8)));
+    d_buffer.push_back((uint8_t)(0xFF  & payload_len));
 
-    // copy in the payload
-    std::copy(pdu, pdu + pdu_len, d_buffer+d_preamble_len+d_sync_word.size()+2);
+    // insert in the payload
+    d_buffer.insert(d_buffer.end(), pdu, pdu+pdu_len);
+    uint8_t* buf = d_buffer.data();
 
     /* Make a pmt compatible with the pdu to tagged stream block */
-    pmt::pmt_t vecpmt(pmt::make_blob(d_buffer, (size_t)(d_preamble_len+pdu_len+d_sync_word.size()+2)));
+    pmt::pmt_t vecpmt(pmt::make_blob(buf, (size_t)(d_buffer.size())));
     pmt::pmt_t res(pmt::cons(pmt::PMT_NIL, vecpmt));
+    d_buffer.clear();
     return res;
 }
 
