@@ -14,6 +14,11 @@ parameters:
     dtype: int
     default: 4
 
+  - id: FEC_toggle
+    label: FEC Toggle
+    dtype: bool
+    default: false
+
   - id: sync_word
     label: Synchronization Word
     dtype: raw
@@ -30,6 +35,6 @@ value: ${ str(id) }
 templates:
   imports: import gnuradio.uniclogs as uniclogs
   make:
-    self.${id} = ${id} = uniclogs.ieee802_15_4_encoder(${preamble}, ${preamble_len}, ${sync_word}, ${frame_len})
+    self.${id} = ${id} = uniclogs.ieee802_15_4_encoder(${preamble}, ${preamble_len}, ${FEC_toggle}, ${sync_word}, ${frame_len})
 
 file_format: 1

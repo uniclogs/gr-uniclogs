@@ -13,7 +13,7 @@
 /* If manual edits are made, the following tags should be modified accordingly.    */
 /* BINDTOOL_GEN_AUTOMATIC(0)                                                       */
 /* BINDTOOL_USE_PYGCCXML(0)                                                        */
-/* BINDTOOL_HEADER_FILE(ieee802_15_4_decoder.h) */
+/* BINDTOOL_HEADER_FILE(ieee802_15_4_decoder.h)                                        */
 /* BINDTOOL_HEADER_FILE_HASH(8f6d8b9e821cca4ec93b3e3deb2b74ea)                     */
 /***********************************************************************************/
 
@@ -56,9 +56,7 @@ void bind_ieee802_15_4_decoder(py::module& m)
              D(ieee802_15_4_decoder, decode))
 
 
-        .def("reset",
-             &ieee802_15_4_decoder::reset,
-             D(ieee802_15_4_decoder, reset))
+        .def("reset", &ieee802_15_4_decoder::reset, D(ieee802_15_4_decoder, reset))
 
         ;
 }

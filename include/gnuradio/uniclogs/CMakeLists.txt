@@ -17,5 +17,6 @@ install(FILES api.h
     frame_decoder.h
     frame_encoder.h
     encoder.h
+    util.h
     ieee802_15_4_encoder.h
     ieee802_15_4_decoder.h DESTINATION include/gnuradio/uniclogs)

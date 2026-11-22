@@ -1,5 +1,5 @@
 id: uniclogs_ieee802_15_4_decoder
-label: IEEE 802.15.4 Variable Decoder Definition
+label: IEEE 802.15.4 Decoder Definition
 category: "[uniclogs]"
 flags: [show_id]
 

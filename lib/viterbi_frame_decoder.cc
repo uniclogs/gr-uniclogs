@@ -133,6 +133,7 @@ DecodeStatus FrameDecoder::parse_header(const std::vector<uint8_t>& coded, int* 
 
     // Retrieve the length of the packet, in the configured bit order
     int length = 0;
+    uint16_t length = 0;
     for (int i = 0; i < kLengthFieldBits; i++) {
         const int bit = bits[kHeaderBits - kLengthFieldBits + i];
         if (length_lsb_first_) {

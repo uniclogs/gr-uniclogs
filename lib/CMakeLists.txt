@@ -20,6 +20,7 @@ list(APPEND uniclogs_sources
     frame_encoder_impl.cc
     ieee802_15_4_decoder.cc
     ieee802_15_4_encoder.cc
+    util.cc
     metadata.cc
     shift_reg.cc)
 

@@ -22,32 +22,30 @@ constexpr bool kPackLsbFirst = true;
 
 ieee802_15_4_decoder::sptr
 ieee802_15_4_decoder::make(const std::vector<uint8_t>& preamble,
-                                   size_t preamble_threshold,
-                                   const std::vector<uint8_t>& sync,
-                                   size_t sync_threshold,
-                                   bool FEC_toggle,
-                                   bool invert_payload,
-                                   bool length_little_endian)
+                           size_t preamble_threshold,
+                           const std::vector<uint8_t>& sync,
+                           size_t sync_threshold,
+                           bool FEC_toggle,
+                           bool invert_payload,
+                           bool length_little_endian)
 {
 
-    return ieee802_15_4_decoder::sptr(
-        new ieee802_15_4_decoder(preamble,
-                                         preamble_threshold,
-                                         sync,
-                                         sync_threshold,
-                                         FEC_toggle,
-                                         invert_payload,
-                                         length_little_endian));
+    return ieee802_15_4_decoder::sptr(new ieee802_15_4_decoder(preamble,
+                                                               preamble_threshold,
+                                                               sync,
+                                                               sync_threshold,
+                                                               FEC_toggle,
+                                                               invert_payload,
+                                                               length_little_endian));
 }
 
-ieee802_15_4_decoder::ieee802_15_4_decoder(
-    const std::vector<uint8_t>& preamble,
-    size_t preamble_threshold,
-    const std::vector<uint8_t>& sync,
-    size_t sync_threshold,
-    bool FEC_toggle,
-    bool invert_payload,
-    bool length_little_endian)
+ieee802_15_4_decoder::ieee802_15_4_decoder(const std::vector<uint8_t>& preamble,
+                                           size_t preamble_threshold,
+                                           const std::vector<uint8_t>& sync,
+                                           size_t sync_threshold,
+                                           bool FEC_toggle,
+                                           bool invert_payload,
+                                           bool length_little_endian)
     : decoder("IEEE-802.15.4", "1.1", sizeof(uint8_t), uniclogs_fec::kMaxMessageBytes),
       d_extractor(new uniclogs_fec::FrameExtractor(preamble,
                                                    preamble_threshold,
@@ -120,7 +118,9 @@ ieee802_15_4_decoder::~ieee802_15_4_decoder() {}
 
 void ieee802_15_4_decoder::reset()
 {
-    d_extractor->reset();
+    if (d_FEC_toggle) {
+        d_extractor->reset();
+    }
     d_cnt = 0;
     /* There are case that no preamble is used */
     if (d_preamble_len) {
@@ -256,8 +256,8 @@ int ieee802_15_4_decoder::decode_frame_len(const uint8_t* in)
 }
 
 void ieee802_15_4_decoder::decode_payload(decoder_status_t& status,
-                                                  const uint8_t* in,
-                                                  int len)
+                                          const uint8_t* in,
+                                          int len)
 {
     const int s = len / 8;
     size_t flen = d_len;

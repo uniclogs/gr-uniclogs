@@ -14,7 +14,7 @@
 /* BINDTOOL_GEN_AUTOMATIC(0)                                                       */
 /* BINDTOOL_USE_PYGCCXML(0)                                                        */
 /* BINDTOOL_HEADER_FILE(ieee802_15_4_encoder.h)                                        */
-/* BINDTOOL_HEADER_FILE_HASH(85b79676c3bad9366c9ac76b0db84bd3)                     */
+/* BINDTOOL_HEADER_FILE_HASH(08a0a460d4d4e28134e5de2f22f18e9b)                     */
 /***********************************************************************************/
 
 #include <pybind11/complex.h>
@@ -41,6 +41,7 @@ void bind_ieee802_15_4_encoder(py::module& m)
         .def(py::init(&ieee802_15_4_encoder::make),
              py::arg("preamble"),
              py::arg("preamble_len"),
+             py::arg("FEC_toggle"),
              py::arg("sync_word"),
              py::arg("frame_len"),
              D(ieee802_15_4_encoder, make))

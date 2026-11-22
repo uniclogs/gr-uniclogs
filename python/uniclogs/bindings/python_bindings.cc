@@ -23,7 +23,7 @@ namespace py = pybind11;
 // Please do not delete
 /**************************************/
 // BINDING_FUNCTION_PROTOTYPES(
-    void bind_ieee802_15_4_variant_decoder(py::module& m);
+    void bind_ieee802_15_4_decoder(py::module& m);
     void bind_frame_decoder(py::module& m);
     void bind_frame_encoder(py::module& m);
     void bind_ieee802_15_4_encoder(py::module& m);
@@ -57,7 +57,7 @@ PYBIND11_MODULE(uniclogs_python, m)
     // BINDING_FUNCTION_CALLS(
     py::class_<gr::uniclogs::decoder, std::shared_ptr<gr::uniclogs::decoder>>(m, "decoder");
     py::class_<gr::uniclogs::encoder, std::shared_ptr<gr::uniclogs::encoder>>(m, "encoder");
-    bind_ieee802_15_4_variant_decoder(m);
+    bind_ieee802_15_4_decoder(m);
     bind_frame_decoder(m);
     bind_frame_encoder(m);
     bind_ieee802_15_4_encoder(m);
