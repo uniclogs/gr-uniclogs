@@ -1,4 +1,5 @@
-cmake_cmd := if os_family() == "windows" { "cmake .." } else { "cmake .. -DCMAKE_INSTALL_PREFIX=/usr" }
+build_flags := "-DCMAKE_INSTALL_PREFIX=/usr / -DCMAKE_BUILD_TYPE=Debug -DCMAKE_LINKER_TYPE=MOLD"
+cmake_cmd := if os_family() == "windows" { "cmake .." } else { f"cmake ..{{build_flags}} " }
 make_cmd := if os_family() == "windows" { "make" } else { "make -j $(nproc)" }
 
 update_block mod:
@@ -25,3 +26,9 @@ clean-build:
   rm -rf ./build
   mkdir build -p
   just build
+
+test:
+	#!/usr/bin/env bash
+	cd ./test
+	grcc FEC_encode_decode.grc
+	python FEC_encode_decode.py

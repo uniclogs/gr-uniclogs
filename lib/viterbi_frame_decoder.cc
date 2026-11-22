@@ -6,6 +6,7 @@
 
 #include "viterbi_frame_decoder.h"
 
+#include <stdio.h>
 #include <algorithm>
 #include <limits>
 
@@ -14,31 +15,35 @@ namespace uniclogs_fec {
 // Marks a state that no path has been able to reach
 constexpr int kUnreachable = std::numeric_limits<int>::max();
 
-// How many of two coded bits differ from the expected values (Hamming distance for u1u0 pair)
-constexpr int kPopcount2[4] = {0, 1, 1, 2};
+// How many of two coded bits differ from the expected values (Hamming distance for u1u0
+// pair)
+constexpr int kPopcount2[4] = { 0, 1, 1, 2 };
 
-size_t coded_bits_for_message(int message_bytes) {
+size_t coded_bits_for_message(int message_bytes)
+{
     const int steps = kHeaderBits + message_bytes * bitsPerByte + kTailBits;
     return 2 * static_cast<size_t>(steps);
 }
 
-std::vector<uint8_t> pack_bits(const std::vector<uint8_t>& bits, bool lsb_first) {
+std::vector<uint8_t> pack_bits(const std::vector<uint8_t>& bits, bool lsb_first)
+{
     std::vector<uint8_t> bytes((bits.size() + 7) / bitsPerByte, 0);
     for (size_t i = 0; i < bits.size(); i++) {
         if (bits[i] == 0) {
             continue;
         }
         const size_t position_in_byte = i % bitsPerByte;
-        const size_t shift = lsb_first ? position_in_byte : bitsPerByte - 1 - position_in_byte;
+        const size_t shift =
+            lsb_first ? position_in_byte : bitsPerByte - 1 - position_in_byte;
         bytes[i / bitsPerByte] |= static_cast<uint8_t>(1u << shift);
     }
     return bytes;
 }
 
 
-
 // Combination of lookup_table and _out table from Python version
-FrameDecoder::FrameDecoder(bool length_lsb_first) : length_lsb_first_(length_lsb_first) {
+FrameDecoder::FrameDecoder(bool length_lsb_first) : length_lsb_first_(length_lsb_first)
+{
     for (int state = 0; state < kNumStates; state++) {
         const int m1 = (state >> 2) & 1;
         const int m2 = (state >> 1) & 1;
@@ -52,15 +57,19 @@ FrameDecoder::FrameDecoder(bool length_lsb_first) : length_lsb_first_(length_lsb
 }
 
 // Returns the first state with the smallest metric, ties go to the lower state
-int FrameDecoder::best_state(const std::array<int, kNumStates>& metrics) {
-    return static_cast<int>(std::min_element(metrics.begin(), metrics.end()) - metrics.begin());
+int FrameDecoder::best_state(const std::array<int, kNumStates>& metrics)
+{
+    return static_cast<int>(std::min_element(metrics.begin(), metrics.end()) -
+                            metrics.begin());
 }
 
 // The bulk of the decoding work happens here
-FrameDecoder::Trellis FrameDecoder::run_trellis(const std::vector<uint8_t>& coded, size_t steps) const {
+FrameDecoder::Trellis FrameDecoder::run_trellis(const std::vector<uint8_t>& coded,
+                                                size_t steps) const
+{
     Trellis trellis;
     trellis.metrics.fill(kUnreachable);
-    trellis.metrics[0] = 0;                 // initialise encoder to state 0
+    trellis.metrics[0] = 0; // initialise encoder to state 0
     trellis.decisions.reserve(steps);
 
     for (size_t t = 0; t < steps; t++) {
@@ -82,7 +91,8 @@ FrameDecoder::Trellis FrameDecoder::run_trellis(const std::vector<uint8_t>& code
                     continue;
                 }
                 // Generate a candidate, keep it if it is better than previous candidate
-                const int hamming_distance = kPopcount2[expected_output_[previous_state][input_bit] ^ received];
+                const int hamming_distance =
+                    kPopcount2[expected_output_[previous_state][input_bit] ^ received];
                 const int candidate = trellis.metrics[previous_state] + hamming_distance;
                 if (candidate < new_metrics[state]) {
                     new_metrics[state] = candidate;
@@ -98,12 +108,13 @@ FrameDecoder::Trellis FrameDecoder::run_trellis(const std::vector<uint8_t>& code
 }
 
 // Traceback, fetches ordered input bits based on recorded trellis
-std::vector<uint8_t> FrameDecoder::traceback(const Trellis& trellis, int end_state) const {
+std::vector<uint8_t> FrameDecoder::traceback(const Trellis& trellis, int end_state) const
+{
     const size_t steps = trellis.decisions.size();
     std::vector<uint8_t> bits(steps, 0);
     int state = end_state;
     // Trace back from last step to first
-    for (size_t t = steps; t --> 0;) {
+    for (size_t t = steps; t-- > 0;) {
         // Input bit that led into current state is top bit
         bits[t] = static_cast<uint8_t>(state >> 2);
         // Move to surviving predecessor, lower two bits become upper
@@ -114,7 +125,9 @@ std::vector<uint8_t> FrameDecoder::traceback(const Trellis& trellis, int end_sta
 }
 
 // Header parsing logic
-DecodeStatus FrameDecoder::parse_header(const std::vector<uint8_t>& coded, int* message_bytes) const {
+DecodeStatus FrameDecoder::parse_header(const std::vector<uint8_t>& coded,
+                                        int* message_bytes) const
+{
     if (coded.size() < kHeaderCodedBits) {
         return DecodeStatus::kNeedMoreBits;
     }
@@ -125,21 +138,28 @@ DecodeStatus FrameDecoder::parse_header(const std::vector<uint8_t>& coded, int* 
 
     // FIXME this should reflect the actual expected values!
     // Currently it just checks that all 5 initial header bits are 0
-    for (int i = 0; i < kHeaderBits - kLengthFieldBits; i++) {
-        if (bits[i] != 0) {
-            return DecodeStatus::kBadHeader;
+    if (length_lsb_first_) {
+        for (int i = 0; i < kHeaderBits - kLengthFieldBits; i++) {
+            if (bits[i] != 0) {
+                return DecodeStatus::kBadHeader;
+            }
+        }
+    } else {
+        for (int i = kHeaderBits; i < kLengthFieldBits; i--) {
+            if (bits[i] != 0) {
+                return DecodeStatus::kBadHeader;
+            }
         }
     }
 
     // Retrieve the length of the packet, in the configured bit order
-    int length = 0;
     uint16_t length = 0;
     for (int i = 0; i < kLengthFieldBits; i++) {
-        const int bit = bits[kHeaderBits - kLengthFieldBits + i];
+        const bool bit = bits[kHeaderBits - kLengthFieldBits + i];
         if (length_lsb_first_) {
-            length |= bit << i;                 // first bit received is the least significant
+            length |= bit << i; // first bit received is the least significant
         } else {
-            length = (length << 1) | bit;       // first bit received is the most significant
+            length = (length << 1) | bit; // first bit received is the most significant
         }
     }
 
@@ -149,7 +169,8 @@ DecodeStatus FrameDecoder::parse_header(const std::vector<uint8_t>& coded, int* 
 }
 
 // Logic for decoding a message based on header information
-DecodeResult FrameDecoder::decode(const std::vector<uint8_t>& coded) const {
+DecodeResult FrameDecoder::decode(const std::vector<uint8_t>& coded) const
+{
     DecodeResult result;
 
     // Get header information and status

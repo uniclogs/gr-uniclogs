@@ -1,12 +1,12 @@
 #ifndef INCLUDED_UNICLOGS_IEEE802_15_4_DECODER_H
 #define INCLUDED_UNICLOGS_IEEE802_15_4_DECODER_H
 
+#include "shift_reg.h"
 #include <gnuradio/uniclogs/api.h>
 #include <gnuradio/uniclogs/decoder.h>
 #include <cstdint>
 #include <memory>
 #include <vector>
-#include "shift_reg.h"
 
 // The real work is done by classes private to lib/. They are only declared
 // here (not included), so this installed header does not depend on them.
@@ -61,12 +61,12 @@ public:
                      bool length_little_endian);
 
     ieee802_15_4_decoder(const std::vector<uint8_t>& preamble,
-                                 size_t preamble_threshold,
-                                 const std::vector<uint8_t>& sync,
-                                 size_t sync_threshold,
-                                 bool FEC_toggle,
-                                 bool invert_payload,
-                                 bool length_little_endian);
+                         size_t preamble_threshold,
+                         const std::vector<uint8_t>& sync,
+                         size_t sync_threshold,
+                         bool FEC_toggle,
+                         bool invert_payload,
+                         bool length_little_endian);
 
     ~ieee802_15_4_decoder();
 
@@ -78,10 +78,10 @@ private:
     std::unique_ptr<uniclogs_fec::FrameExtractor> d_extractor;
 
     typedef enum {
-            SEARCHING,                  //!< when searching for the start of the preamble
-            SEARCHING_SYNC,             //!< We have preamble, search for sync
-            DECODING_GENERIC_FRAME_LEN, //!< Decoding the frame length
-            DECODING_PAYLOAD            //!< Decoding the payload
+        SEARCHING,                  //!< when searching for the start of the preamble
+        SEARCHING_SYNC,             //!< We have preamble, search for sync
+        DECODING_GENERIC_FRAME_LEN, //!< Decoding the frame length
+        DECODING_PAYLOAD            //!< Decoding the payload
     } decoding_state_t;
 
     shift_reg d_preamble;

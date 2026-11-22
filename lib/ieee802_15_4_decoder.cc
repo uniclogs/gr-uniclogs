@@ -165,7 +165,6 @@ decoder_status_t ieee802_15_4_decoder::decode(const void* in, int len)
                 status.data, pdu.empty() ? &kNoBytes : pdu.data(), pdu.size());
             status.decode_success = true;
         }
-
     } else {
         switch (d_state) {
         case SEARCHING:
@@ -230,7 +229,7 @@ int ieee802_15_4_decoder::search_sync(const uint8_t* in, int len)
 int ieee802_15_4_decoder::decode_frame_len(const uint8_t* in)
 {
     uint32_t b = 0x0;
-    uint8_t* bytes = new uint8_t[d_length_field_len];
+    auto* bytes = new uint8_t[d_length_field_len];
     for (size_t i = 0; i < d_length_field_len; i++) {
         uint8_t b = 0x0;
         b = in[i * 8 + 7] << 0;

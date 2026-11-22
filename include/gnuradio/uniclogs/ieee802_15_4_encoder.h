@@ -3,9 +3,9 @@
 
 #include <gnuradio/uniclogs/api.h>
 #include <gnuradio/uniclogs/encoder.h>
+#include <gnuradio/uniclogs/shift_reg.h>
 #include <cstddef>
 #include <cstdint>
-#include <gnuradio/uniclogs/shift_reg.h>
 
 namespace gr {
 namespace uniclogs {
@@ -34,11 +34,12 @@ public:
     pmt::pmt_t encode(pmt::pmt_t msg);
 
 private:
-    const uint8_t tail_bits = 3;       // ieee 802.15.4 adds 3 tail bits for a terminated code
-    const uint8_t coding_rate = 2;     // 1/2 rate convolutional coder
+    const uint8_t tail_bits = 3;   // ieee 802.15.4 adds 3 tail bits for a terminated code
+    const uint8_t coding_rate = 2; // 1/2 rate convolutional coder
     const uint32_t frame_buffer = 2048; // AT86RF215 RX frame decoder
-    const uint8_t phr_len = 2;         // length of the pHR in bytes
-
+    const uint8_t phr_len = 2;          // length of the PHR in bytes
+    const int len_field_bits = 11;
+    const int phr_len_bits = 16;
     const size_t d_max_frame_len;
     const size_t d_preamble_len;
     const uint8_t d_preamble;

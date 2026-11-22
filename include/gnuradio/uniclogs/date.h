@@ -193,8 +193,7 @@ using sys_time = std::chrono::time_point<std::chrono::system_clock, Duration>;
 using sys_days = sys_time<days>;
 using sys_seconds = sys_time<std::chrono::seconds>;
 
-struct local_t {
-};
+struct local_t {};
 
 template <class Duration>
 using local_time = std::chrono::time_point<local_t, Duration>;
@@ -523,8 +522,7 @@ std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>&
 
 namespace detail {
 
-struct unspecified_month_disambiguator {
-};
+struct unspecified_month_disambiguator {};
 
 } // namespace detail
 
@@ -972,8 +970,7 @@ CONSTCD11 date::year operator"" _y(unsigned long long y) NOEXCEPT;
 #if HAS_VOID_T
 
 template <class T, class = std::void_t<>>
-struct is_clock : std::false_type {
-};
+struct is_clock : std::false_type {};
 
 template <class T>
 struct is_clock<T,
@@ -982,8 +979,7 @@ struct is_clock<T,
                             typename T::period,
                             typename T::duration,
                             typename T::time_point,
-                            decltype(T::is_steady)>> : std::true_type {
-};
+                            decltype(T::is_steady)>> : std::true_type {};
 
 template <class T>
 inline constexpr bool is_clock_v = is_clock<T>::value;
@@ -7092,13 +7088,14 @@ template <class Parsable, class CharT, class Traits, class Alloc>
 inline auto parse(const std::basic_string<CharT, Traits, Alloc>& format,
                   Parsable& tp,
                   std::chrono::minutes& offset)
-    -> decltype(
-        date::from_stream(std::declval<std::basic_istream<CharT, Traits>&>(),
-                          format.c_str(),
-                          tp,
-                          std::declval<std::basic_string<CharT, Traits, Alloc>*>(),
-                          &offset),
-        parse_manip<Parsable, CharT, Traits, Alloc>{ format, tp, nullptr, &offset })
+    -> decltype(date::from_stream(
+                    std::declval<std::basic_istream<CharT, Traits>&>(),
+                    format.c_str(),
+                    tp,
+                    std::declval<std::basic_string<CharT, Traits, Alloc>*>(),
+                    &offset),
+                parse_manip<Parsable, CharT, Traits, Alloc>{
+                    format, tp, nullptr, &offset })
 {
     return { format, tp, nullptr, &offset };
 }
